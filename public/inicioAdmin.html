@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Park APP</title>
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Font Awesome  -->
+    <link rel="stylesheet" href="css/all.css">
+    <!-- Custom CSS  -->
+    <link rel="stylesheet" href="css/main.css"
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+          <a class="navbar-brand" href="inicioAdmin.html">Tarjetones 2019</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Menu
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="registrarUsuario.html">Agregar Empleado</a>
+                    <a class="dropdown-item" href="empleados.html">Empleados</a>
+                    <a class="dropdown-item" href="carros.html">Carros</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
+                  </div>
+                </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+    <main class="container p-5" id="p-container">
+        <div id="message"></div>
+        <div class="jumbotron mt-4">
+            <h1 class="display-4">Subdirección Administrativa
+              <div class="" style="width: 30%; height: 30%; float:right">
+                <img class="rounded-circle mx-auto d-block logo2 m-4" src="img/logo.jpg" alt="Logo">
+              </div>
+            </h1>
+            <h2 class="lead"> Tarjetones 2019</h2>
+            <hr class="my-4">
+            <div id="welcome"></div>
+          </div>
+    </main>
+
+    <!-- Bootstrap 4 javascript -->
+    <script src="js/jquery.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script>
+
+        let home = `        
+            <div id="message"></div>
+            <div class="jumbotron mt-4">
+                <h1 class="display-4">Subdirección Administrativa
+                <div class="" style="width: 30%; height: 30%; float:right">
+                    <img class="rounded-circle mx-auto d-block logo2 m-4" src="img/logo.jpg" alt="Logo">
+                </div>
+                </h1>
+                <h2 class="lead"> Tarjetones 2019</h2>
+                <hr class="my-4">
+                <a class="btn btn-secondary btn-lg" id="signin"  style="color: white; cursor: pointer;" onclick="signinf();">Ingresar</a>
+            </div>
+        `;
+
+        let about = `
+            <div id="message"></div>
+            <div class="jumbotron mt-4">
+                <h1 class="display-4">Escuela Superior de Medicina
+                    <div class="" style="width: 30%; height: 30%; float:right">
+                    <img class="rounded-circle mx-auto d-block logo2 m-4" src="img/logo.jpg" alt="Logo">
+                    </div>
+                </h1>
+                <hr class="my-4">
+                <p class="h3">Dr. Juan Garcia Cavazos</p>
+                <p class="h5" style="color:gray">Director</p>
+                <p class="h5">Dra. Rosa Garcia y Gallardo</p>
+                <p class="h6" style="color:gray">Subdirectora Administrativa</p>
+                <p class="h6">Ing. Giovanni Rojas Resendiz</p>
+                <p class="h7" style="color:gray">Desarrollador de Aplicacion</p>
+                <hr class="my-4">
+                <p>
+                    Escuela Superior de Medicina - Subdirección Administrativa
+                </p>
+                <p>
+                    IPN 2019 ParkAPP by Giovanni Rojas
+                </p>
+
+            </div>
+        `;
+
+        let signin = `
+            <div id="message"></div>
+            <div class="row">
+                <div class="col-md-4 mx-auto">
+                    <div class="card mt-4 text-center">
+                        <img class="rounded-circle mx-auto d-block logo m-4" src="img/logo.jpg" alt="Logo">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="emp" placeholder="Empleado" id="emp" autofocus required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" id="pass" placeholder="Password" required>
+                        </div>
+                        <a class="btn btn-secondary btn-block" id="login" style="color:white;" onclick="login();">Iniciar Sesión</a>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            $(document).ready(function() {
+                $("#home").click(()=>{
+                $("#p-container").text("");
+                $("#p-container").html(home);
+                $("#home").css("color","gray");
+                $("#about").css("color","white");
+                $("#_signin").css("color","white");
+            });
+
+            $("#_home").click(()=>{
+                $("#p-container").text("");
+                $("#p-container").html(home);
+                $("#home").css("color","gray");
+                $("#about").css("color","white");
+                $("#_signin").css("color","white");
+            });
+
+            $("#about").click(()=>{
+                $("#p-container").text("");
+                $("#p-container").html(about);
+                $("#about").css("color","gray");
+                $("#home").css("color","white");
+                $("#_signin").css("color","white");
+            });
+
+            $("#signin").click(()=>{
+                $("#p-container").text("");
+                $("#p-container").html(signin);
+                $("#about").css("color","white");
+                $("#_signin").css("color","gray");
+                $("#home").css("color","white");
+            });
+
+            $("#_signin").click(()=>{
+                $("#p-container").text("");
+                $("#p-container").html(signin);
+                $("#about").css("color","white");
+                $("#_signin").css("color","gray");
+                $("#home").css("color","white");
+            });
+        });
+
+        function login(){
+            $.ajax({
+                type: "POST",
+                url: "/login",
+                data: {
+                    user: $("#emp").val(),
+                    pass: $("#pass").val()
+                },
+                success: (response) => {    
+                    if(response.error.length != 0){
+                        errorMessage(response.error[0]);
+                    }
+                    else{
+                        notificationMessage(response.message[0]);
+                        if(response.level == 0){
+                            window.location.href="registrarUsuario.html";
+                        }
+                        else{
+                            window.location.href="registrarCarro.html";
+                        }      
+                    }
+                }
+            });
+        }
+
+        function signinf(){
+            $("#p-container").text("");
+            $("#p-container").html(signin);
+            $("#about").css("color","white");
+            $("#_signin").css("color","gray");
+            $("#home").css("color","white");
+        }
+
+        function errorMessage(message){
+            let error = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `;
+            $("#message").text("");
+            $("#message").html(error);
+            $("#message").fadeIn(1000,()=>{
+                $("#message").fadeOut(3000,()=>{
+                    $("#message").text("");
+                });
+            });
+        }
+
+        function notificationMessage(message){
+            let notification = `
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            `;
+            $("#message").text("");
+            $("#message").html(notification);
+            $("#message").fadeIn(1000,()=>{
+                $("#message").fadeOut(3000,()=>{
+                    $("#message").text("");
+                });
+            });
+        }
+
+        $.ajax({
+            type:"POST",
+            url:"/getUser",
+            success:(resolve)=>{
+                if(resolve!=null){
+                    $("#welcome").text("¡Bienvenido "+resolve+"!");
+                }
+                else{
+                    window.location.href="index.html";
+                }
+            }
+        });
+        
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,299 @@
+<html lang="en" dir="ltr"><head>
+    <meta charset="utf-8">
+    <title>Park APP</title>
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Font Awesome  -->
+    <link rel="stylesheet" href="css/all.css">
+    <!-- Custom CSS  -->
+    <link rel="stylesheet" href="css/main.css" <="" head="">
+    <script data-dapp-detection="">
+        (function() {
+        let alreadyInsertedMetaTag = false
+
+        function __insertDappDetected() {
+            if (!alreadyInsertedMetaTag) {
+            const meta = document.createElement('meta')
+            meta.name = 'dapp-detected'
+            document.head.appendChild(meta)
+            alreadyInsertedMetaTag = true
+            }
+        }
+
+        if (window.hasOwnProperty('web3')) {
+            // Note a closure can't be used for this var because some sites like
+            // www.wnyc.org do a second script execution via eval for some reason.
+            window.__disableDappDetectionInsertion = true
+            // Likely oldWeb3 is undefined and it has a property only because
+            // we defined it. Some sites like wnyc.org are evaling all scripts
+            // that exist again, so this is protection against multiple calls.
+            if (window.web3 === undefined) {
+            return
+            }
+            if (!window.web3.currentProvider ||
+                !window.web3.currentProvider.isMetaMask) {
+            __insertDappDetected()
+            }
+        } else {
+            var oldWeb3 = window.web3
+            Object.defineProperty(window, 'web3', {
+            configurable: true,
+            set: function (val) {
+                if (!window.__disableDappDetectionInsertion)
+                __insertDappDetected()
+                oldWeb3 = val
+            },
+            get: function () {
+                if (!window.__disableDappDetectionInsertion)
+                __insertDappDetected()
+                return oldWeb3
+            }
+            })
+        }
+        })()</script>
+    </head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">Tarjetones 2019</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Menu
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="registrarUsuario.html">Agregar Empleado</a>
+                  <a class="dropdown-item" href="/cars">Carros</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
+                </div>
+              </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <br>
+    <br>
+    <br>
+
+    <main style="width: 90%;margin: auto;">
+      
+        <div id="message"></div>
+
+        <div id="content"></div>
+
+    </main>
+
+<!-- Bootstrap 4 javascript -->
+<script src="js/jquery.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+    <script>
+
+        function getEmployees(){
+            $.ajax({
+                type: "POST",
+                url : "/getEmployees",
+                success: (response)=>{
+                    if(response==""){
+                        window.location.href="index.html";
+                    }
+                    else if(response.message.length !=0 ){
+                        $("#content").text("");
+                        $("#content").html(response.message[0]);
+                    }
+                    else{
+                        window.location.href = "index.html";
+                    }
+                }
+            });
+        }
+
+        function moveEmployee(apat,amat,name,num,tar,rfc,dep,fun,est,cel,ext,email,turno){
+            $("#content").text("");
+            let html = `      
+            <div class="col-md-4 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="getEmployees();">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    <h3>Nuevo Empleado</h3>
+                    </div>
+                    <div class="card-body">
+                    <form fontstyle="transform: uppercase;">
+                        <div class="form-group" style="text-transform: uppercase;">
+                        <input type="text" id="appat" name="appat" class="form-control" placeholder="Apellido Paterno" required="" autofocus="" value="${apat}">
+                        </div>
+                        <div class="form-group">
+                        <input type="text" id="apmat" name="apmat" class="form-control" placeholder="Apellido Materno" required="" value="${amat}">
+                        </div>
+                        <div class="form-group">
+                        <input type="text" id="nom" name="nom" class="form-control" placeholder="Nombre(s)" required="" value="${name}">
+                        </div>
+                        <div class="form-group">
+                        <input type="text" id="rfc" name="rfc" class="form-control" placeholder="RFC" required="" value="${rfc}">
+                        </div>
+                        <div class="form-group">
+                        <input type="text" id="numemp" name="numemp" class="form-control" placeholder="Numero de empleado IPN" required="" value="${num}">
+                        </div>
+                        <div class="form-group">
+                        <input type="text" id="tarjchek" name="tarjchek" class="form-control" placeholder="Numero de tarjeta checador" required="" value="${tar}">
+                        </div>
+                        <div class="form-group" style="text-transform: uppercase;">
+                            <select class="form-control" name="nombra" id="nombra" required="" value="${fun}">
+                                <option>Nombramiento</option>
+                                <option>Funcionario</option>
+                                <option>Docente</option>
+                                <option>PAAE</option>
+                                <option>Posgrado</option>
+                                <option>Interino</option>
+                                <option>Prestador de Servicio</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="turno" name="turno" required="" value="${turno}">
+                            <option>Turno</option>
+                            <option>Matutino</option>
+                            <option>Vespertino</option>
+                        </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="est" name="est" required="" value="${est}">
+                                <option>Estatus</option>
+                                <option>Base</option>
+                                <option>Interinato</option>
+                                <option>Sustitucion</option>
+                                <option>Confianza</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                        <input type="text" name="adscrip" id="adscrip" class="form-control" placeholder="Departamento de Adscripción" required="" value="${dep}">
+                        </div>
+                        <div class="form-group">
+                        <input type="email" name="email" id="email" class="form-control" placeholder="correo@ipn.mx" required="" value="${email}">
+                        </div>
+                        <div class="form-group">
+                        <input type="tel" name="celular" id="celular" class="form-control" placeholder="Celular" required="" value="${cel}">
+                        </div>
+                        <div class="form-group">
+                        <input type="tel" name="ext"  id="ext" class="form-control" placeholder="Extension IPN" required="" s="" value="${ext}">
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn-secondary btn-block" onclick="editEmployee();">Guardar</a>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                </div>`;
+            $("#content").html(html);
+            $("#nombra").val(fun);
+            $("#turno").val(turno);
+            $("#est").val(est);
+        }
+
+        function editEmployee(){
+            $.ajax({
+                type:"POST",
+                url:"/editEmployees",
+                data:{
+                    name:  $("#nom").val(),
+                    appat: $("#appat").val(),
+                    apmat: $("#apmat").val(),
+                    rfc:   $("#rfc").val(),
+                    num:   $("#numemp").val(),
+                    tar:   $("#tarjchek").val(),
+                    nom:   $("#nombra").val(),
+                    turn:  $("#turno").val(),
+                    ads:   $("#adscrip").val(),
+                    email: $("#email").val(),
+                    phone: $("#celular").val(),
+                    ext:   $("#ext").val(),
+                    est:   $("#est").val()
+                },
+                success:(response)=>{
+                    if(response.error.length != 0){
+                        errorMessage(response.error[0]);
+                    }
+                    else if(response.message.length !=0 ){
+                        notificationMessage(response.message[0]);
+                        getEmployees();
+                    }
+                    else{
+                        window.location.href = "index.html";
+                    }
+                }
+            });
+        }
+
+        function deleteEmployee(num){
+            $.ajax({
+                type:"POST",
+                url:"/deleteEmployees",
+                data:{num:num},
+                success:(response)=>{
+                    if(response.error.length != 0){
+                        errorMessage(response.error[0]);
+                    }
+                    else if(response.message.length !=0 ){
+                        notificationMessage(response.message[0]);
+                        getEmployees();
+                    }
+                    else{
+                        window.location.href = "index.html";
+                    }
+                }
+            });
+        }
+
+        function errorMessage(message) {
+            let error = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `;
+            $("#message").text("");
+            $("#message").html(error);
+            $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                    $("#message").text("");
+                });
+            });
+        }
+
+        function notificationMessage(message) {
+            let notification = `
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            `;
+            $("#message").text("");
+            $("#message").html(notification);
+            $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                    $("#message").text("");
+                });
+            });
+        }
+
+        $(document).ready(()=>{
+            getEmployees();
+        });
+
+    </script>
+
+</body>
+</html>
