@@ -67,15 +67,15 @@ exports.addEmployee = function(data){
 
 exports.getEmployees = function(){
     try{
-    return new Promise((resolve,reject)=>{
-        connection.query("SELECT * FROM empleado",(err,results,fields)=>{
-            if(err){
-                console.log(err);
-                resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
-            }
-            resolve(results);
+        return new Promise((resolve,reject)=>{
+            connection.query("SELECT * FROM empleado",(err,results,fields)=>{
+                if(err){
+                    console.log(err);
+                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                }
+                resolve(results);
+            });
         });
-    });
     }catch(err){console.log(err);}
 };
 
@@ -107,6 +107,20 @@ exports.deleteEmployee = function(num){
                 });
                 connection.query("DELETE FROM empleado WHERE num_emp = ?",[num]);
                 resolve({error:[],message:["Empleado eliminado correctamente"]});
+            });
+        });
+    }catch(err){console.log(err);}
+};
+
+exports.getCars = function(){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro",(err,results,fields)=>{
+                if(err){
+                    console.log(err);
+                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                }
+                resolve(results);
             });
         });
     }catch(err){console.log(err);}

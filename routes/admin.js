@@ -117,6 +117,7 @@ router.post("/deleteEmployees",(req,res)=>{
 router.post("/getEmployees",(req,res)=>{
     if(req.session.level=="admin"){
         database.getEmployees().then((resolve)=>{
+
             let html = `<table class="table table-sm table-hover table-bordered" style="background-color: white;">
                             <tr>
                                 <th style="text-align: center; vertical-align: middle;">Nombre</th>
@@ -171,6 +172,59 @@ router.post("/getEmployees",(req,res)=>{
 
             res.send({error:[],message:[html]});
 
+        });
+    }
+    else{
+        res.send({error:[],message:[]});
+    }
+});
+
+router.post("/getCars",(req,res)=>{
+    if(req.session.level=="admin"){
+        database.getCars().then((resolve)=>{
+            let html = `<table class="table table-sm table-hover table-bordered" style="background-color: white;">
+                            <tr>
+                                <th style="text-align: center; vertical-align: middle;">Nombre</th>
+                                <th style="text-align: center; vertical-align: middle">Número</th>
+                                <th style="text-align: center; vertical-align: middle">Departamento</th>
+                                <th style="text-align: center; vertical-align: middle">Celular</th>
+                                <th style="text-align: center; vertical-align: middle">Turno</th>
+                                <th style="text-align: center; vertical-align: middle">Placa</th>
+                                <th style="text-align: center; vertical-align: middle">Marca</th>
+                                <th style="text-align: center; vertical-align: middle">SubMarca</th>
+                                <th style="text-align: center; vertical-align: middle">Color</th>
+                                <th style="text-align: center; vertical-align: middle">Eliminar</th>
+                            </tr>
+            `;
+            resolve.forEach(element => {
+                html += `<tr>
+                            <td style="text-align: center; vertical-align: middle">${element.apat_emp+" "+element.amat_emp+" "+element.nom_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.num_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.dep_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.cel_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.turno}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.placa_car}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.marca_car}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.smarca_car}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.color}</td>
+                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;">Eliminar</a></td>
+                        </tr>`;
+            });
+
+            html += "</table>";
+
+            if(resolve.length == 0){
+                html = `<div class="col-md-4 mx-auto">
+                            <div class="card mx-auto">
+                                <div class="card-body">
+                                <!--<h1>Hello </h1>-->
+                                <p class="lead">No hay carros aun!</p>
+                                <a href="registrarUsuario.html" class="btn btn-success btn-block">Añade uno!</a>
+                            </div>
+                        </div>`;
+            }
+
+            res.send({error:[],message:[html]});
         });
     }
     else{
