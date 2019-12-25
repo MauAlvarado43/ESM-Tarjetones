@@ -49,6 +49,7 @@
             </h1>
             <h2 class="lead"> Tarjetones 2019</h2>
             <hr class="my-4">
+            <div id="welcome"></div>
           </div>
     </main>
 
@@ -94,6 +95,19 @@
                 });
             });
         }
+
+        $.ajax({
+            type:"POST",
+            url:"/getName",
+            success:(resolve)=>{
+                if(resolve!=null){
+                    $("#welcome").text("¡Bienvenido "+resolve+"!");
+                }
+                else{
+                    window.location.href="index.html";
+                }
+            }
+        });
         
     </script>
 

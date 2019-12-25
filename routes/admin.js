@@ -207,7 +207,8 @@ router.post("/getCars",(req,res)=>{
                             <td style="text-align: center; vertical-align: middle">${element.marca_car}</td>
                             <td style="text-align: center; vertical-align: middle">${element.smarca_car}</td>
                             <td style="text-align: center; vertical-align: middle">${element.color}</td>
-                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;">Eliminar</a></td>
+                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;"
+                             onclick="deleteCar(${element.id_car},${element.id_reg});">Eliminar</a></td>
                         </tr>`;
             });
 
@@ -219,7 +220,6 @@ router.post("/getCars",(req,res)=>{
                                 <div class="card-body">
                                 <!--<h1>Hello </h1>-->
                                 <p class="lead">No hay carros aun!</p>
-                                <a href="registrarUsuario.html" class="btn btn-success btn-block">Añade uno!</a>
                             </div>
                         </div>`;
             }
@@ -230,6 +230,24 @@ router.post("/getCars",(req,res)=>{
     else{
         res.send({error:[],message:[]});
     }
+});
+
+router.post("/deleteCar",(req,res)=>{
+
+    if(req.session.level=="admin"){
+        
+        let id_car = req.body.n;
+        let id_reg = req.body.m;
+
+        database.deleteCar(id_car,id_reg).then((resolve)=>{
+            res.send(resolve);
+        });
+
+    }
+    else{
+        res.send({error:[],message:[]});
+    }
+
 });
 
 module.exports = router;

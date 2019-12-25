@@ -17,6 +17,7 @@ app.use(session({
 
 app.use(require('./routes/users'));
 app.use(require('./routes/admin'));
+app.use(require('./routes/employee'));
 
 app.use(express.static('public'));
 

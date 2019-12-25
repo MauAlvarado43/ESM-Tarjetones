@@ -38,6 +38,20 @@ exports.login = function(user,pass){
     }catch(err){console.log(err);}
 };
 
+exports.getEmployeeByNumber = function(num_emp){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("SELECT * FROM empleado WHERE num_emp = ?",[num_emp],(err,results,fields)=>{
+                if(err){
+                    console.log(err);
+                    resolve(null);
+                }
+                resolve(results);
+            });
+        });
+    }catch(err){console.log(err);}
+};
+
 exports.addEmployee = function(data){
     try{
         return new Promise((resolve,reject)=>{
@@ -124,4 +138,45 @@ exports.getCars = function(){
             });
         });
     }catch(err){console.log(err);}
+};
+
+exports.addCar = function(num_emp,brand,sbrand,color,plate){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("INSERT INTO carro (placa_car,marca_car,smarca_car,color) VALUES (?,?,?,?)",[plate,brand,sbrand,color],(err,results,fields)=>{
+                if(err){
+                    console.log(err);
+                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                }
+                connection.query("INSERT INTO registro (id_car,id_emp) values ("+results.insertId+",(SELECT id_emp FROM empleado WHERE num_emp = ?))",[num_emp],(err2,results2,fields2)=>{
+                    if(err2){
+                        console.log(err2);
+                        resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                    }
+                    resolve({error:[],message:["Carro registrado correctamente"]});
+                });
+            });
+        });
+    }catch(err){console.log(err);}
+};
+
+exports.deleteCar = function(id_car,id_reg){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("DELETE FROM registro WHERE id_reg = ?",[id_reg],(err,results,fields)=>{
+                if(err){
+                    console.log(err);
+                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                }
+                connection.query("DELETE FROM carro WHERE id_car = ?",[id_car],(err2,results2,fields2)=>{
+                    if(err2){
+                        console.log(err2);
+                        resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                    }
+                    resolve({error:[],message:["Carro Eliminado correctamente"]});
+                });
+            });
+        });
+    }catch(err){console.log(err);
+    }
 };
