@@ -21,4 +21,9 @@ app.use(require('./routes/employee'));
 
 app.use(express.static('public'));
 
+/*
+var QRCode = require('qrcode');
+QRCode.toFile("example.png","Hola mundo",[{ data: [253,254,255], mode: 'byte' }]);
+*/
+
 app.listen(3000,()=>{console.log("Escuchando en el puerto 3000");});
