@@ -3,6 +3,8 @@ const session = require('express-session');
 const upload = require('express-fileupload');
 const bodyParser = require('body-parser');
 
+const zipFolder = require('zip-a-folder');
+
 let app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,9 +23,18 @@ app.use(require('./routes/employee'));
 
 app.use(express.static('public'));
 
-/*
-var QRCode = require('qrcode');
-QRCode.toFile("example.png","Hola mundo",[{ data: [253,254,255], mode: 'byte' }]);
-*/
+app.get("/downloadZIP",(req,res)=>{
+	if(req.session.level=="admin"){
+		zipFolder.zipFolder(__dirname.replace(/\\/g,"/")+'/qrCodes', __dirname.replace(/\\/g,"/")+'/qrCodes/qrGuardados.zip', function(err) {
+			if(err) {
+				console.log(err);
+			}
+			res.download( __dirname.replace(/\\/g,"/")+'/qrCodes/archive.zip');
+		});
+	}
+	else{
+		res.send({error:[],message:[]});
+	}
+});
 
 app.listen(3000,()=>{console.log("Escuchando en el puerto 3000");});

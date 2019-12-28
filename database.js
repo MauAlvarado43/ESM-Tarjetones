@@ -1,4 +1,5 @@
 const mysql = require("mysql");
+const ip = "http://192.168.100.48:3000";
 
 let connection = mysql.createConnection({
 	host     : 'localhost',
@@ -6,6 +7,11 @@ let connection = mysql.createConnection({
 	password : 'n0m3l0',
 	database : 'park'
 });
+
+function getActualDate(){
+    let date = new Date();
+    return (date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds());
+}
 
 exports.login = function(user,pass){
     try{
@@ -107,6 +113,20 @@ exports.editEmployee = function(num,data){
     }catch(err){console.log(err);}
 };
 
+exports.editProfile = function(num,data){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("UPDATE empleado SET ? WHERE num_emp = ?",[data,num],(err,results,fields)=>{
+                if(err){
+                    console.log(err);
+                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                }
+                resolve({error:[],message:["Datos modificados correctamente"]});
+            });
+        });
+    }catch(err){console.log(err);}
+}
+
 exports.deleteEmployee = function(num){
     try{
         return new Promise((resolve,reject)=>{
@@ -143,17 +163,38 @@ exports.getCars = function(){
 exports.addCar = function(num_emp,brand,sbrand,color,plate){
     try{
         return new Promise((resolve,reject)=>{
+
+            let date = getActualDate();
+
             connection.query("INSERT INTO carro (placa_car,marca_car,smarca_car,color) VALUES (?,?,?,?)",[plate,brand,sbrand,color],(err,results,fields)=>{
                 if(err){
                     console.log(err);
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                 }
-                connection.query("INSERT INTO registro (id_car,id_emp) values ("+results.insertId+",(SELECT id_emp FROM empleado WHERE num_emp = ?))",[num_emp],(err2,results2,fields2)=>{
+                connection.query("INSERT INTO registro (id_car,id_emp,fecha) values ("+results.insertId+",(SELECT id_emp FROM empleado WHERE num_emp = ?),'"+date+"')",[num_emp],(err2,results2,fields2)=>{
                     if(err2){
                         console.log(err2);
                         resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                     }
-                    resolve({error:[],message:["Carro registrado correctamente"]});
+                    
+                    connection.query("SELECT * FROM empleado WHERE num_emp = ?",[num_emp],(err3,results3,fields3)=>{
+                        
+                        if(err3){
+                            console.log(err2);
+                            resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                        }
+
+                        if(results3.length == 0){
+                            resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                        }
+                        else{
+                            var QRCode = require('qrcode');
+                            QRCode.toFile(`./qrCodes/${results3[0].apat_emp}_${results3[0].amat_emp}_${results3[0].nom_emp}_${date.replace(/\:/g,"_").replace(" ",",")}.png`,`${ip}/readQR?xyz=${num_emp}&abc=${results2.insertId}&mno=${results.insertId}`,[{ data: [253,254,255], mode: 'byte' }]);
+                            resolve({error:[],message:["Carro registrado correctamente"]});
+                        }
+
+                    });
+
                 });
             });
         });
@@ -179,4 +220,60 @@ exports.deleteCar = function(id_car,id_reg){
         });
     }catch(err){console.log(err);
     }
+};
+
+exports.getCarsByNum = function(num_emp){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro WHERE num_emp = ?",[num_emp],(err,results,fields)=>{
+                if(err){
+                    console.log(err);
+                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                }
+                resolve(results);
+            });
+        });
+    }catch(err){console.log(err);}
+};
+
+exports.deleteMyCar = function(id_reg,id_car){
+    try{
+        return new Promise((resolve,reject)=>{
+
+            connection.query("SELECT * FROM registro NATURAL JOIN empleado WHERE id_reg = ?",[id_reg],(err3,res3,fls3)=>{
+                try{
+                    require("fs").unlink(`./qrCodes/${res3[0].apat_emp}_${res3[0].amat_emp}_${res3[0].nom_emp}_${res3[0].fecha.replace(" ",",").replace(/\:/g,"_")}.png`,(err4)=>{
+                        if(err4){console.log(err4);}
+                    })
+                }catch(err5){console.log(err5);}
+            });
+
+            connection.query("DELETE FROM registro WHERE id_reg = ?",[id_reg],(err)=>{
+                if(err){
+                    console.log(err);
+                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                }
+                connection.query("DELETE FROM carro WHERE id_car = ?",[id_car],(err2)=>{
+                    if(err2){
+                        console.log(err2);
+                        resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                    }
+                    resolve({error:[],message:["Carro Eliminado correctamente"]});
+                });
+            });
+        });
+    }catch(err){console.log(err);}
+};
+
+exports.readQR = function(num_emp,id_reg,id_car){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro WHERE num_emp = ? AND id_reg = ? AND id_car = ?",[num_emp,id_reg,id_car],(err,res,fields)=>{
+                if(err){
+                    console.log(err);
+                }
+                resolve(res);
+            });
+        });
+    }catch(err){console.log(err);}
 };

@@ -10,7 +10,7 @@
     <!-- Font Awesome  -->
     <link rel="stylesheet" href="css/all.css">
     <!-- Custom CSS  -->
-    <link rel="stylesheet" href="css/main.css"
+    <link rel="stylesheet" href="css/main.css">
   </head>
 
   <body>
@@ -38,18 +38,18 @@
           </div>
         </div>
       </nav>
-    <main class="container p-5" id="p-container">
-        <div id="message"></div>
-        <div class="jumbotron mt-4">
-            <h1 class="display-4">Subdirección Administrativa
-              <div class="" style="width: 30%; height: 30%; float:right">
-                <img class="rounded-circle mx-auto d-block logo2 m-4" src="img/logo.jpg" alt="Logo">
-              </div>
-            </h1>
-            <h2 class="lead"> Tarjetones 2019</h2>
-            <hr class="my-4">
-          </div>
-    </main>
+
+      <br>
+      <br>
+      <br>
+
+        <main style="width: 90%;margin: auto;">
+      
+          <div id="message"></div>
+
+          <div id="content"></div>
+
+        </main>
 
     <!-- Bootstrap 4 javascript -->
     <script src="js/jquery.js"></script>
@@ -93,6 +93,49 @@
                 });
             });
         }
+
+        function getMyCars(){
+          $.ajax({
+            type:"POST",
+            url:"/getMyCars",
+            success:(response)=>{
+              if(response.error.length != 0){
+                errorMessage(response.error[0]);
+              }
+              else if(response.message.length !=0 ){
+                $("#content").text("");
+                $("#content").html(response.message[0]);
+              }
+              else{
+                window.location.href = "index.html";
+              }
+            }
+          });
+        }
+
+        function deleteMyCar(m,n){
+          $.ajax({
+            type:"POST",
+            url:"/deleteMyCar",
+            data:{m:m,n:n},
+            success:(response)=>{
+              if(response.error.length != 0){
+                errorMessage(response.error[0]);
+              }
+              else if(response.message.length !=0 ){
+                notificationMessage(response.message[0]);
+                getMyCars();
+              }
+              else{
+                window.location.href = "index.html";
+              }
+            }
+          });
+        }
+
+        $(document).ready(()=>{
+          getMyCars();
+        });
         
     </script>
 

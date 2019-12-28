@@ -68,7 +68,7 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="empleados.html">Empleados</a>
-                  <a class="dropdown-item" href="/cars">Carros</a>
+                  <a class="dropdown-item" href="carros.html">Carros</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
                 </div>
@@ -184,7 +184,6 @@
                     est:   $("#est").val()
                 },
                 success:(response)=>{
-                    console.log(response);
                     if(response.error.length != 0){
                         errorMessage(response.error[0]);
                     }

@@ -25,7 +25,7 @@ router.post("/addEmployee",(req,res)=>{
     let bool = true;
 
     array.forEach(element => {
-        if(element == "" || element == null || element == "Undefined"){
+        if(element == "" || element == null || element == undefined){
             bool = false;
         }
     });
@@ -66,7 +66,7 @@ router.post("/editEmployees",(req,res)=>{
         let bool = true;
     
         array.forEach(element => {
-            if(element == "" || element == null || element == "Undefined"){
+            if(element == "" || element == null || element == undefined){
                 bool = false;
             }
         });
@@ -105,9 +105,14 @@ router.post("/editEmployees",(req,res)=>{
 router.post("/deleteEmployees",(req,res)=>{
     if(req.session.level=="admin"){
         let num = req.body.num;
-        database.deleteEmployee(num).then((resolve)=>{
-            res.send(resolve);
-        });
+        if(num == "" || num == null || num == undefined){
+            res.send({error:["Los parámetros no son correctos"],message:[]});
+        }
+        else{
+            database.deleteEmployee(num).then((resolve)=>{
+                res.send(resolve);
+            });
+        }    
     }
     else{
         res.send({error:[],message:[]});
@@ -239,9 +244,17 @@ router.post("/deleteCar",(req,res)=>{
         let id_car = req.body.n;
         let id_reg = req.body.m;
 
-        database.deleteCar(id_car,id_reg).then((resolve)=>{
-            res.send(resolve);
-        });
+        if(id_car == "" || id_car == null || id_car == undefined){
+            res.send({error:["Los parámetros no son correctos"],message:[]});
+        }
+        else if(id_reg == "" || id_reg == null || id_reg == undefined){
+            res.send({error:["Los parámetros no son correctos"],message:[]});
+        }
+        else{
+            database.deleteCar(id_car,id_reg).then((resolve)=>{
+                res.send(resolve);
+            });
+        }
 
     }
     else{
