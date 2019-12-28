@@ -25,7 +25,7 @@ router.post("/addEmployee",(req,res)=>{
     let bool = true;
 
     array.forEach(element => {
-        if(element == "" || element == null || element == undefined){
+        if(element == "" || element == null || element == undefined || element=="Turno" || element == "Estatus" || element == "Nombramiento"){
             bool = false;
         }
     });
@@ -66,7 +66,7 @@ router.post("/editEmployees",(req,res)=>{
         let bool = true;
     
         array.forEach(element => {
-            if(element == "" || element == null || element == undefined){
+            if(element == "" || element == null || element == undefined || element=="Turno" || element == "Estatus" || element == "Nombramiento"){
                 bool = false;
             }
         });

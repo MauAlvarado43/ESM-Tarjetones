@@ -143,7 +143,7 @@ router.post("/getProfile",(req,res)=>{
     }
     else{
         database.getEmployeeByNumber(req.session.user).then((resolve)=>{
-            if(resolve == null){
+            if(resolve == null || resolve.length == 0){
                 res.send({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
             }
             else{
@@ -178,32 +178,36 @@ router.post("/getProfile",(req,res)=>{
                                 </div>
                                 <div class="form-group" style="text-transform: uppercase;">
                                 Nombramiento:<br>
-                                <input type="text" id="tarjchek" name="tarjchek" class="form-control" readonly value="${resolve[0].fun_emp}">
+                                <input type="text" id="fun" name="fun" class="form-control" readonly value="${resolve[0].fun_emp}">
                                 </div>
                                 <div class="form-group" style="text-transform: uppercase;">
                                 Estatus:<br>
-                                <input type="text" id="tarjchek" name="tarjchek" class="form-control" readonly value="${resolve[0].est_emp}">
+                                <input type="text" id="est" name="est" class="form-control" readonly value="${resolve[0].est_emp}">
                                 </div>
                                 <hr class="my-4">
                                 <div class="form-group" style="text-transform: uppercase;">
                                 Departamento de Adscripción:<br>
-                                <input type="text" id="dep" name="dep" class="form-control" readonly value="${resolve[0].dep_emp}">
+                                <input type="text" id="dep" name="dep" class="form-control" value="${resolve[0].dep_emp}">
                                 </div>
                                 <div class="form-group" style="text-transform: uppercase;">
                                 Turno:<br>
-                                <input type="text" id="turn" name="turn" class="form-control" readonly value="${resolve[0].turno}">
+                                <select class="form-control" id="turn" name="turn" required="">
+                                    <option>Turno</option>
+                                    <option ${(resolve[0].turno=="Matutino")?'selected="selected"':''}>Matutino</option>
+                                    <option ${(resolve[0].turno=="Vespertino")?'selected="selected"':''}>Vespertino</option>
+                                </select>
                                 </div>
-                                <div class="form-group" style="text-transform: uppercase;>
+                                <div class="form-group" style="text-transform: uppercase;">
                                 Correo electrónico:<br>
-                                <input type="text" id="email" name="email" class="form-control" readonly value="${resolve[0].email}">
+                                <input type="text" id="email" name="email" class="form-control" value="${resolve[0].email}">
                                 </div>
-                                <div class="form-group" style="text-transform: uppercase;>
+                                <div class="form-group" style="text-transform: uppercase;">
                                 Celular:<br>
-                                <input type="text" id="cel" name="cel" class="form-control" readonly value="${resolve[0].cel_emp}">
+                                <input type="text" id="cel" name="cel" class="form-control" value="${resolve[0].cel_emp}">
                                 </div>
-                                <div class="form-group" style="text-transform: uppercase;>
+                                <div class="form-group" style="text-transform: uppercase;">
                                 Extensión IPN:<br>
-                                <input type="text" id="ext" name="ext" class="form-control" readonly value="${resolve[0].ext_emp}">
+                                <input type="text" id="ext" name="ext" class="form-control" value="${resolve[0].ext_emp}">
                                 </div>
                                 <div class="form-group">
                                     <a class="btn btn-secondary btn-block" onclick="updateEmployee();">Guardar</a>
@@ -232,7 +236,7 @@ router.post("/updateProfile",(req,res)=>{
     else if(dep == "" || dep == null || dep == undefined){
         res.send({error:["Los parámetros no son correctos"],message:[]});
     }
-    else if(turn == "" || turn == null || turn == undefined){
+    else if(turn == "" || turn == null || turn == undefined || turn == "Turno"){
         res.send({error:["Los parámetros no son correctos"],message:[]});
     }
     else if(email == "" || email == null || email == undefined){

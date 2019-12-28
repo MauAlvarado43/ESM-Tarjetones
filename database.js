@@ -8,6 +8,10 @@ let connection = mysql.createConnection({
 	database : 'park'
 });
 
+connection.query(`LOAD DATA LOCAL INFILE 'D:/tarjetones_new/db/baseEstacionamiento.csv' INTO TABLE empleado CHARACTER SET latin1 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES;`,(err)=>{
+    if(err){console.log(err);}
+});
+
 function getActualDate(){
     let date = new Date();
     return (date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds());

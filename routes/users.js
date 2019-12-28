@@ -56,21 +56,177 @@ router.get("/readQR",(req,res)=>{
   let id_car = req.query.mno;
 
   if(num_emp == null || id_car == null || id_reg == null){
-    res.send("Está mal construído el código QR, no pertenece a nuestra base de datos");
+    res.send(`<!DOCTYPE html>
+
+      <html lang="es">
+      
+        <head>
+          <meta charset="utf-8">
+          <title>Park APP</title>
+          <!-- Bootstrap 4 -->
+          <link rel="stylesheet" href="css/bootstrap.min.css">
+          <!-- Font Awesome  -->
+          <link rel="stylesheet" href="css/all.css">
+          <!-- Custom CSS  -->
+          <link rel="stylesheet" href="css/main.css"
+        </head>
+      
+        <body>
+      
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" id="_home" style="color: white; cursor: pointer;">Tarjetones 2019</a>
+              
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+      
+          <main class="container p-5" id="p-container">
+              <div id="message"></div>
+              <div class="jumbotron mt-4">
+                  <h2 class="lead">Está mal construído el código QR, no pertenece a nuestra base de datos</h2>
+              </div>
+          </main>
+      
+          <!-- Bootstrap 4 javascript -->
+          <script src="js/jquery.js"></script>
+          <script src="js/popper.min.js"></script>
+          <script src="js/bootstrap.min.js"></script>
+          </body>
+          </html>`);
   }
 
   else if(num_emp == undefined || id_car == undefined || id_reg == undefined){
-    res.send("Está mal construído el código QR, no pertenece a nuestra base de datos");
+    res.send(`<!DOCTYPE html>
+
+    <html lang="es">
+    
+      <head>
+        <meta charset="utf-8">
+        <title>Park APP</title>
+        <!-- Bootstrap 4 -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <!-- Font Awesome  -->
+        <link rel="stylesheet" href="css/all.css">
+        <!-- Custom CSS  -->
+        <link rel="stylesheet" href="css/main.css"
+      </head>
+    
+      <body>
+    
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div class="container">
+              <a class="navbar-brand" id="_home" style="color: white; cursor: pointer;">Tarjetones 2019</a>
+            
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+          </div>
+      </nav>
+    
+        <main class="container p-5" id="p-container">
+            <div id="message"></div>
+            <div class="jumbotron mt-4">
+                <h2 class="lead">Está mal construído el código QR, no pertenece a nuestra base de datos</h2>
+            </div>
+        </main>
+    
+        <!-- Bootstrap 4 javascript -->
+        <script src="js/jquery.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        </body>
+        </html>`);
   }
 
   else{
     database.readQR(num_emp,id_reg,id_car).then((resolve)=>{
       if(resolve.length==0){
-        res.send("Este carro no está registrado");
+        res.send(`<!DOCTYPE html>
+
+        <html lang="es">
+        
+          <head>
+            <meta charset="utf-8">
+            <title>Park APP</title>
+            <!-- Bootstrap 4 -->
+            <link rel="stylesheet" href="css/bootstrap.min.css">
+            <!-- Font Awesome  -->
+            <link rel="stylesheet" href="css/all.css">
+            <!-- Custom CSS  -->
+            <link rel="stylesheet" href="css/main.css"
+          </head>
+        
+          <body>
+        
+          <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+              <div class="container">
+                  <a class="navbar-brand" id="_home" style="color: white; cursor: pointer;">Tarjetones 2019</a>
+                
+                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                  </button>
+              </div>
+          </nav>
+        
+            <main class="container p-5" id="p-container">
+                <div id="message"></div>
+                <div class="jumbotron mt-4">
+                    <h2 class="lead">Este carro no está registrado</h2>
+                </div>
+            </main>
+        
+            <!-- Bootstrap 4 javascript -->
+            <script src="js/jquery.js"></script>
+            <script src="js/popper.min.js"></script>
+            <script src="js/bootstrap.min.js"></script>
+            </body>
+            </html>`);
       }
       else{
-        res.send(`Este QR corresponde a un ${resolve[0].marca_car} ${resolve[0].smarca_car} color ${resolve[0].color}
-         y le pertenece a ${resolve[0].nom_emp} ${resolve[0].apat_emp}`);
+        res.send(`<!DOCTYPE html>
+
+        <html lang="es">
+        
+          <head>
+            <meta charset="utf-8">
+            <title>Park APP</title>
+            <!-- Bootstrap 4 -->
+            <link rel="stylesheet" href="css/bootstrap.min.css">
+            <!-- Font Awesome  -->
+            <link rel="stylesheet" href="css/all.css">
+            <!-- Custom CSS  -->
+            <link rel="stylesheet" href="css/main.css"
+          </head>
+        
+          <body>
+        
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
+                    <a class="navbar-brand" id="_home" style="color: white; cursor: pointer;">Tarjetones 2019</a>
+                  
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </nav>
+        
+            <main class="container p-5" id="p-container">
+                <div id="message"></div>
+                <div class="jumbotron mt-4">
+                    <h2 class="lead">Este QR corresponde a un ${resolve[0].marca_car} ${resolve[0].smarca_car} color ${resolve[0].color}
+                    y le pertenece a ${resolve[0].nom_emp} ${resolve[0].apat_emp}</h2>
+                </div>
+            </main>
+        
+            <!-- Bootstrap 4 javascript -->
+            <script src="js/jquery.js"></script>
+            <script src="js/popper.min.js"></script>
+            <script src="js/bootstrap.min.js"></script>
+            </body>
+            </html>`);
       }
     });
     

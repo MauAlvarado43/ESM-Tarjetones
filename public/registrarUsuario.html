@@ -189,6 +189,19 @@
                     }
                     else if(response.message.length !=0 ){
                       notificationMessage(response.message[0]);
+                      $("#nom").val("");
+                      $("#appat").val("");
+                      $("#apmat").val("");
+                      $("#rfc").val("");
+                      $("#numemp").val("");
+                      $("#tarjchek").val("");
+                      $("#nombra").val("Nombramiento");
+                      $("#turno").val("Turno");
+                      $("#adscrip").val("");
+                      $("#email").val("");
+                      $("#celular").val("");
+                      $("#ext").val("");
+                      $("#est").val("Estatus");
                     }
                     else{
                       window.location.href = "index.html";
