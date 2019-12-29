@@ -2,114 +2,191 @@
 
 <html lang="es">
 
-  <head>
-    <meta charset="utf-8">
-    <title>Park APP</title>
-    <!-- Bootstrap 4 -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- Font Awesome  -->
-    <link rel="stylesheet" href="css/all.css">
-    <!-- Custom CSS  -->
-    <link rel="stylesheet" href="css/main.css"
-  </head>
-
+<head>
+  <meta charset="utf-8">
+  <title>Park APP</title>
+  <!-- Bootstrap 4 -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- Font Awesome  -->
+  <link rel="stylesheet" href="css/all.css">
+  <!-- Custom CSS  -->
+  <link rel="stylesheet" href="css/main.css">
+</head> 
   <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-          <a class="navbar-brand" href="inicioEmpleado.html">Tarjetones 2019</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Menu
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="perfil.html">Perfil</a>
-                    <a class="dropdown-item" href="registrarCarro.html">Registrar carro</a>
-                    <a class="dropdown-item" href="verCarros.html">Ver carros</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
-                  </div>
-                </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    <main class="container p-5" id="p-container">
-        <div id="message"></div>
-        <div class="jumbotron mt-4">
-            <h1 class="display-4">Subdirección Administrativa
-              <div class="" style="width: 30%; height: 30%; float:right">
-                <img class="rounded-circle mx-auto d-block logo2 m-4" src="img/logo.jpg" alt="Logo">
-              </div>
-            </h1>
-            <h2 class="lead"> Tarjetones 2019</h2>
-            <hr class="my-4">
-            <div id="welcome"></div>
-          </div>
-    </main>
-
-    <!-- Bootstrap 4 javascript -->
-    <script src="js/jquery.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-
-    <script>
-
-        function errorMessage(message){
-            let error = `
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    ${message}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            `;
-            $("#message").text("");
-            $("#message").html(error);
-            $("#message").fadeIn(1000,()=>{
-                $("#message").fadeOut(3000,()=>{
-                    $("#message").text("");
-                });
-            });
-        }
-
-        function notificationMessage(message){
-            let notification = `
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                ${message}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="inicioEmpleado.html">Tarjetones 2019</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Menu
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="perfil.html">Perfil</a>
+              <a class="dropdown-item" href="registrarCarro.html">Registrar carro</a>
+              <a class="dropdown-item" href="verCarros.html">Ver carros</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
             </div>
-            `;
-            $("#message").text("");
-            $("#message").html(notification);
-            $("#message").fadeIn(1000,()=>{
-                $("#message").fadeOut(3000,()=>{
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <main class="container p-5" id="p-container">
+    <div id="message"></div>
+    <div class="jumbotron mt-4">
+      <h1 class="display-4">Subdirección Administrativa
+        <div class="" style="width: 30%; height: 30%; float:right">
+          <img class="rounded-circle mx-auto d-block logo2 m-4" src="img/logo.jpg" alt="Logo">
+        </div>
+      </h1>
+      <h2 class="lead"> Tarjetones 2019</h2>
+      <hr class="my-4">
+      <div id="welcome"></div>
+    </div>
+  </main>
+
+  <!-- Bootstrap 4 javascript -->
+  <script src="js/jquery.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+
+  <script>
+
+function errorMessage(message) {
+            if (Notification) {
+                if (Notification.permission !== "granted") {
+                    Notification.requestPermission();  
+                    let error = `
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `;
                     $("#message").text("");
+                    $("#message").html(error);
+                    $("#message").fadeIn(1000, () => {
+                    $("#message").fadeOut(3000, () => {
+                            $("#message").text("");
+                        });
+                    });
+                }      
+                else{
+                    var title = "Error";
+                    var extra = {
+                        icon: "./img/no.png",
+                        body: message
+                    };
+                    var noti = new Notification(title, extra);
+                    setTimeout(function () { noti.close() }, 10000);
+                } 
+                let audio = new Audio("./sounds/no.mp3");
+                audio.volume = 0.2;
+                audio.play();   
+            }
+            else{
+                let error = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `;
+                $("#message").text("");
+                $("#message").html(error);
+                $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                        $("#message").text("");
+                    });
                 });
-            });
+                let audio = new Audio("./sounds/no.mp3");
+                audio.volume = 0.2;
+                audio.play();  
+            }
         }
 
-        $.ajax({
-            type:"POST",
-            url:"/getName",
-            success:(resolve)=>{
-                if(resolve!=null){
-                    $("#welcome").text("¡Bienvenido "+resolve+"!");
-                }
+
+        function notificationMessage(message) {
+            if (Notification) {
+                if (Notification.permission !== "granted") {
+                    Notification.requestPermission();
+                    let notification = `
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `;
+                    $("#message").text("");
+                    $("#message").html(notification);
+                    $("#message").fadeIn(1000, () => {
+                    $("#message").fadeOut(3000, () => {
+                            $("#message").text("");
+                        });
+                    });
+                }      
                 else{
-                    window.location.href="index.html";
+                    var title = "Éxito";
+                        var extra = {
+                            icon: "./img/ok.png",
+                            body: message
+                        };
+                        var noti = new Notification(title, extra);
+                        setTimeout(function () { noti.close() }, 10000);
                 }
+                let audio = new Audio("./sounds/ok.mp3");
+                audio.volume = 0.2;
+                audio.play(); 
             }
-        });
-        
-    </script>
+            else{
+                let notification = `
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ${message}
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `;
+                $("#message").text("");
+                $("#message").html(notification);
+                $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                        $("#message").text("");
+                    });
+                });
+                let audio = new Audio("./sounds/ok.mp3");
+                audio.volume = 0.2;
+                audio.play();
+            }
+        }
+
+    $.ajax({
+      type: "POST",
+      url: "/getName",
+      success: (resolve) => {
+        if (resolve != null) {
+          $("#welcome").text("¡Bienvenido " + resolve + "!");
+        }
+        else {
+          window.location.href = "index.html";
+        }
+      }
+    });
+
+  </script>
 
   </body>
+
 </html>

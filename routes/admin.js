@@ -140,6 +140,7 @@ router.post("/getEmployees",(req,res)=>{
                                 <th style="text-align: center; vertical-align: middle">Eliminar</th>
                             </tr>
             `;
+
             resolve.forEach(element => {
                 html += `<tr>
                             <td style="text-align: center; vertical-align: middle">${element.apat_emp+" "+element.amat_emp+" "+element.nom_emp}</td>
@@ -184,9 +185,77 @@ router.post("/getEmployees",(req,res)=>{
     }
 });
 
-router.post("/getCars",(req,res)=>{
+router.post("/getEmployeesSearched",(req,res)=>{
     if(req.session.level=="admin"){
-        database.getCars().then((resolve)=>{
+        database.getCarsSearched(req.body.n).then((resolve)=>{
+
+            let html = `<table class="table table-sm table-hover table-bordered" style="background-color: white;">
+                            <tr>
+                                <th style="text-align: center; vertical-align: middle;">Nombre</th>
+                                <th style="text-align: center; vertical-align: middle">Número</th>
+                                <th style="text-align: center; vertical-align: middle">Tarjeta</th>
+                                <th style="text-align: center; vertical-align: middle">RFC</th>
+                                <th style="text-align: center; vertical-align: middle">Departamento</th>
+                                <th style="text-align: center; vertical-align: middle">Función</th>
+                                <th style="text-align: center; vertical-align: middle">Estado</th>
+                                <th style="text-align: center; vertical-align: middle">Celular</th>
+                                <th style="text-align: center; vertical-align: middle">Extensión</th>
+                                <th style="text-align: center; vertical-align: middle">Email</th>
+                                <th style="text-align: center; vertical-align: middle">Turno</th>
+                                <th style="text-align: center; vertical-align: middle">Modificar</th>
+                                <th style="text-align: center; vertical-align: middle">Eliminar</th>
+                            </tr>
+            `;
+
+            resolve.forEach(element => {
+                html += `<tr>
+                            <td style="text-align: center; vertical-align: middle">${element.apat_emp+" "+element.amat_emp+" "+element.nom_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.num_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.tar_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.rfc_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.dep_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.fun_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.est_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.cel_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.ext_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.email}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.turno}</td>
+                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;" 
+                            onclick="moveEmployee('${element.apat_emp}','${element.amat_emp}','${element.nom_emp}',${element.num_emp},${element.tar_emp},
+                            '${element.rfc_emp}','${element.dep_emp}','${element.fun_emp}','${element.est_emp}','${element.cel_emp}','${element.ext_emp}',
+                            '${element.email}','${element.turno}');">Modificar</a></td>
+                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;" 
+                            onclick="deleteEmployee(${element.num_emp});">Eliminar</a></td>
+                        </tr>`;
+            });
+
+            html += "</table>";
+
+            if(resolve.length == 0){
+                html = `<div class="col-md-4 mx-auto">
+                            <div class="card mx-auto">
+                                <div class="card-body">
+                                <!--<h1>Hello </h1>-->
+                                <p class="lead">No hay un empleado con ese número!</p>
+                            </div>
+                        </div>`;
+            }
+
+            res.send({error:[],message:[html]});
+
+        });
+    }
+    else{
+        res.send({error:[],message:[]});
+    }
+});
+
+router.post("/getCarsSearched",(req,res)=>{
+
+    let num_emp = req.body.n;
+
+    if(req.session.level=="admin"){
+        database.getCarsSearched(num_emp).then((resolve)=>{
             let html = `<table class="table table-sm table-hover table-bordered" style="background-color: white;">
                             <tr>
                                 <th style="text-align: center; vertical-align: middle;">Nombre</th>
@@ -198,6 +267,7 @@ router.post("/getCars",(req,res)=>{
                                 <th style="text-align: center; vertical-align: middle">Marca</th>
                                 <th style="text-align: center; vertical-align: middle">SubMarca</th>
                                 <th style="text-align: center; vertical-align: middle">Color</th>
+                                <th style="text-align: center; vertical-align: middle">Generar QR</th>
                                 <th style="text-align: center; vertical-align: middle">Eliminar</th>
                             </tr>
             `;
@@ -212,6 +282,64 @@ router.post("/getCars",(req,res)=>{
                             <td style="text-align: center; vertical-align: middle">${element.marca_car}</td>
                             <td style="text-align: center; vertical-align: middle">${element.smarca_car}</td>
                             <td style="text-align: center; vertical-align: middle">${element.color}</td>
+                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;"
+                             onclick="generateQR(${element.id_car},${element.id_reg},${element.num_emp});">Generar QR</a></td>
+                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;"
+                             onclick="deleteCar(${element.id_car},${element.id_reg});">Eliminar</a></td>
+                        </tr>`;
+            });
+
+            html += "</table>";
+
+            if(resolve.length == 0){
+                html = `<div class="col-md-4 mx-auto">
+                            <div class="card mx-auto">
+                                <div class="card-body">
+                                <!--<h1>Hello </h1>-->
+                                <p class="lead">No hay carros registrados por ese empleado!</p>
+                            </div>
+                        </div>`;
+            }
+
+            res.send({error:[],message:[html]});
+        });
+    }
+    else{
+        res.send({error:[],message:[]});
+    }
+});
+
+router.post("/getCars",(req,res)=>{
+    if(req.session.level=="admin"){
+        database.getCars().then((resolve)=>{
+            let html = `<table class="table table-sm table-hover table-bordered" style="background-color: white;">
+                            <tr>
+                                <th style="text-align: center; vertical-align: middle;">Nombre</th>
+                                <th style="text-align: center; vertical-align: middle">Número</th>
+                                <th style="text-align: center; vertical-align: middle">Departamento</th>
+                                <th style="text-align: center; vertical-align: middle">Celular</th>
+                                <th style="text-align: center; vertical-align: middle">Turno</th>
+                                <th style="text-align: center; vertical-align: middle">Placa</th>
+                                <th style="text-align: center; vertical-align: middle">Marca</th>
+                                <th style="text-align: center; vertical-align: middle">SubMarca</th>
+                                <th style="text-align: center; vertical-align: middle">Color</th>
+                                <th style="text-align: center; vertical-align: middle">Generar QR</th>
+                                <th style="text-align: center; vertical-align: middle">Eliminar</th>
+                            </tr>
+            `;
+            resolve.forEach(element => {
+                html += `<tr>
+                            <td style="text-align: center; vertical-align: middle">${element.apat_emp+" "+element.amat_emp+" "+element.nom_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.num_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.dep_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.cel_emp}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.turno}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.placa_car}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.marca_car}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.smarca_car}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.color}</td>
+                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;"
+                             onclick="generateQR(${element.id_car},${element.id_reg},${element.num_emp});">Generar QR</a></td>
                             <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;"
                              onclick="deleteCar(${element.id_car},${element.id_reg});">Eliminar</a></td>
                         </tr>`;
@@ -260,6 +388,28 @@ router.post("/deleteCar",(req,res)=>{
     else{
         res.send({error:[],message:[]});
     }
+
+});
+
+router.post("/generateQR",(req,res)=>{
+
+    let id_car = req.body.m;
+    let id_reg = req.body.n;
+    let num_emp = req.body.o;
+
+    var QRCode = require('qrcode');
+
+    //${results3[0].apat_emp}_${results3[0].amat_emp}_${results3[0].nom_emp}_${date.replace(/\:/g,"_").replace(" ",",")}.png`
+
+    database.readQR(num_emp,id_reg,id_car).then((resolve)=>{
+        QRCode.toDataURL(`${database.ip}/readQR?xyz=${num_emp}&abc=${id_reg}&mno=${id_car}`, function (err, url) {
+            if(err){console.log(err);}
+            res.send({
+                url:url,
+                name:resolve[0].apat_emp+"_"+resolve[0].amat_emp+"_"+resolve[0].nom_emp+"_"+resolve[0].fecha.replace(/\:/g,"_").replace(" ",",")+".png"
+            });
+        });
+    });
 
 });
 

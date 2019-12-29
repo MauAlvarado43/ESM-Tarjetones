@@ -1,114 +1,123 @@
-<html lang="en" dir="ltr"><head>
-    <meta charset="utf-8">
-    <title>Park APP</title>
-    <!-- Bootstrap 4 -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- Font Awesome  -->
-    <link rel="stylesheet" href="css/all.css">
-    <!-- Custom CSS  -->
-    <link rel="stylesheet" href="css/main.css" <="" head="">
-    <script data-dapp-detection="">
-        (function() {
-        let alreadyInsertedMetaTag = false
+<html lang="en" dir="ltr">
 
-        function __insertDappDetected() {
-            if (!alreadyInsertedMetaTag) {
-            const meta = document.createElement('meta')
-            meta.name = 'dapp-detected'
-            document.head.appendChild(meta)
-            alreadyInsertedMetaTag = true
-            }
-        }
+<head>
+  <meta charset="utf-8">
+  <title>Park APP</title>
+  <!-- Bootstrap 4 -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- Font Awesome  -->
+  <link rel="stylesheet" href="css/all.css">
+  <!-- Custom CSS  -->
+  <link rel="stylesheet" href="css/main.css" <="" head="">
+  <script data-dapp-detection="">
+    (function () {
+      let alreadyInsertedMetaTag = false
 
-        if (window.hasOwnProperty('web3')) {
-            // Note a closure can't be used for this var because some sites like
-            // www.wnyc.org do a second script execution via eval for some reason.
-            window.__disableDappDetectionInsertion = true
-            // Likely oldWeb3 is undefined and it has a property only because
-            // we defined it. Some sites like wnyc.org are evaling all scripts
-            // that exist again, so this is protection against multiple calls.
-            if (window.web3 === undefined) {
-            return
-            }
-            if (!window.web3.currentProvider ||
-                !window.web3.currentProvider.isMetaMask) {
-            __insertDappDetected()
-            }
-        } else {
-            var oldWeb3 = window.web3
-            Object.defineProperty(window, 'web3', {
-            configurable: true,
-            set: function (val) {
-                if (!window.__disableDappDetectionInsertion)
-                __insertDappDetected()
-                oldWeb3 = val
-            },
-            get: function () {
-                if (!window.__disableDappDetectionInsertion)
-                __insertDappDetected()
-                return oldWeb3
-            }
-            })
+      function __insertDappDetected() {
+        if (!alreadyInsertedMetaTag) {
+          const meta = document.createElement('meta')
+          meta.name = 'dapp-detected'
+          document.head.appendChild(meta)
+          alreadyInsertedMetaTag = true
         }
-        })()</script>
-    </head>
+      }
+
+      if (window.hasOwnProperty('web3')) {
+        // Note a closure can't be used for this var because some sites like
+        // www.wnyc.org do a second script execution via eval for some reason.
+        window.__disableDappDetectionInsertion = true
+        // Likely oldWeb3 is undefined and it has a property only because
+        // we defined it. Some sites like wnyc.org are evaling all scripts
+        // that exist again, so this is protection against multiple calls.
+        if (window.web3 === undefined) {
+          return
+        }
+        if (!window.web3.currentProvider ||
+          !window.web3.currentProvider.isMetaMask) {
+          __insertDappDetected()
+        }
+      } else {
+        var oldWeb3 = window.web3
+        Object.defineProperty(window, 'web3', {
+          configurable: true,
+          set: function (val) {
+            if (!window.__disableDappDetectionInsertion)
+              __insertDappDetected()
+            oldWeb3 = val
+          },
+          get: function () {
+            if (!window.__disableDappDetectionInsertion)
+              __insertDappDetected()
+            return oldWeb3
+          }
+        })
+      }
+    })()</script>
+</head>
+
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="/">Tarjetones 2019</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Menu
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="empleados.html">Empleados</a>
-                  <a class="dropdown-item" href="carros.html">Carros</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
-                </div>
-              </li>
-          </ul>
-        </div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">Tarjetones 2019</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Menu
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="empleados.html">Empleados</a>
+              <a class="dropdown-item" href="carros.html">Carros</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
+            </div>
+          </li>
+        </ul>
       </div>
-    </nav>
-
-    <main class="container p-5">
-      
-        <div id="message"></div>
-      
-      <div class="col-md-4 mx-auto">
-  <div class="card">
-    <div class="card-header">
-      <h3>Agregar Empleado</h3>
     </div>
-    <div class="card-body">
-      <form fontstyle="transform: uppercase;">
-        <div class="form-group" style="text-transform: uppercase;">
-          <input type="text" id="appat" name="appat" class="form-control" placeholder="Apellido Paterno" required="" autofocus="">
+  </nav>
+
+  <main class="container p-5">
+
+    <div id="message"></div>
+
+    <div class="col-md-4 mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <h3>Agregar Empleado</h3>
         </div>
-        <div class="form-group">
-          <input type="text" id="apmat" name="apmat" class="form-control" placeholder="Apellido Materno" required="">
-        </div>
-        <div class="form-group">
-          <input type="text" id="nom" name="nom" class="form-control" placeholder="Nombre(s)" required="">
-        </div>
-        <div class="form-group">
-          <input type="text" id="rfc" name="rfc" class="form-control" placeholder="RFC" required="">
-        </div>
-        <div class="form-group">
-          <input type="text" id="numemp" name="numemp" class="form-control" placeholder="Numero de empleado IPN" required="">
-        </div>
-        <div class="form-group">
-          <input type="text" id="tarjchek" name="tarjchek" class="form-control" placeholder="Numero de tarjeta checador" required="">
-        </div>
-        <div class="form-group" style="text-transform: uppercase;">
-            <select class="form-control" name="nombra" id="nombra" required="">
+        <div class="card-body">
+          <form fontstyle="transform: uppercase;">
+            <div class="form-group" style="text-transform: uppercase;">
+              <input type="text" id="appat" name="appat" class="form-control" placeholder="Apellido Paterno" required=""
+                autofocus="">
+            </div>
+            <div class="form-group">
+              <input type="text" id="apmat" name="apmat" class="form-control" placeholder="Apellido Materno"
+                required="">
+            </div>
+            <div class="form-group">
+              <input type="text" id="nom" name="nom" class="form-control" placeholder="Nombre(s)" required="">
+            </div>
+            <div class="form-group">
+              <input type="text" id="rfc" name="rfc" class="form-control" placeholder="RFC" required="">
+            </div>
+            <div class="form-group">
+              <input type="text" id="numemp" name="numemp" class="form-control" placeholder="Numero de empleado IPN"
+                required="">
+            </div>
+            <div class="form-group">
+              <input type="text" id="tarjchek" name="tarjchek" class="form-control"
+                placeholder="Numero de tarjeta checador" required="">
+            </div>
+            <div class="form-group" style="text-transform: uppercase;">
+              <select class="form-control" name="nombra" id="nombra" required="">
                 <option>Nombramiento</option>
                 <option>Funcionario</option>
                 <option>Docente</option>
@@ -116,137 +125,214 @@
                 <option>Posgrado</option>
                 <option>Interino</option>
                 <option>Prestador de Servicio</option>
-            </select>
+              </select>
+            </div>
+            <div class="form-group">
+              <select class="form-control" id="turno" name="turno" required="">
+                <option>Turno</option>
+                <option>Matutino</option>
+                <option>Vespertino</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <select class="form-control" id="est" name="est" required="">
+                <option>Estatus</option>
+                <option>Base</option>
+                <option>Interinato</option>
+                <option>Sustitucion</option>
+                <option>Confianza</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="text" name="adscrip" id="adscrip" class="form-control"
+                placeholder="Departamento de Adscripción" required="">
+            </div>
+            <div class="form-group">
+              <input type="email" name="email" id="email" class="form-control" placeholder="correo@ipn.mx" required="">
+            </div>
+            <div class="form-group">
+              <input type="tel" name="celular" id="celular" class="form-control" placeholder="Celular" required="">
+            </div>
+            <div class="form-group">
+              <input type="tel" name="ext" id="ext" class="form-control" placeholder="Extension IPN" required="" s="">
+            </div>
+            <div class="form-group">
+              <a class="btn btn-secondary btn-block" onclick="insertEmployee();">Guardar</a>
+            </div>
+          </form>
         </div>
-        <div class="form-group">
-            <select class="form-control" id="turno" name="turno" required="">
-            <option>Turno</option>
-            <option>Matutino</option>
-            <option>Vespertino</option>
-          </select>
-        </div>
-        <div class="form-group">
-            <select class="form-control" id="est" name="est" required="">
-            <option>Estatus</option>
-            <option>Base</option>
-            <option>Interinato</option>
-            <option>Sustitucion</option>
-            <option>Confianza</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <input type="text" name="adscrip" id="adscrip" class="form-control" placeholder="Departamento de Adscripción" required="">
-        </div>
-        <div class="form-group">
-          <input type="email" name="email" id="email" class="form-control" placeholder="correo@ipn.mx" required="">
-        </div>
-        <div class="form-group">
-          <input type="tel" name="celular" id="celular" class="form-control" placeholder="Celular" required="">
-        </div>
-        <div class="form-group">
-          <input type="tel" name="ext"  id="ext" class="form-control" placeholder="Extension IPN" required="" s="">
-        </div>
-        <div class="form-group">
-            <a class="btn btn-secondary btn-block" onclick="insertEmployee();">Guardar</a>
-        </div>
-      </form>
+      </div>
     </div>
-  </div>
-</div>
 
 
-</main>
+  </main>
 
-<!-- Bootstrap 4 javascript -->
-<script src="js/jquery.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+  <!-- Bootstrap 4 javascript -->
+  <script src="js/jquery.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
 
-    <script>
+  <script>
 
-        function insertEmployee(){
-            $.ajax({
-                type:"POST",
-                url:"/addEmployee",
-                data:{
-                    name:  $("#nom").val(),
-                    appat: $("#appat").val(),
-                    apmat: $("#apmat").val(),
-                    rfc:   $("#rfc").val(),
-                    num:   $("#numemp").val(),
-                    tar:   $("#tarjchek").val(),
-                    nom:   $("#nombra").val(),
-                    turn:  $("#turno").val(),
-                    ads:   $("#adscrip").val(),
-                    email: $("#email").val(),
-                    phone: $("#celular").val(),
-                    ext:   $("#ext").val(),
-                    est:   $("#est").val()
-                },
-                success:(response)=>{
-                    if(response.error.length != 0){
-                        errorMessage(response.error[0]);
-                    }
-                    else if(response.message.length !=0 ){
-                      notificationMessage(response.message[0]);
-                      $("#nom").val("");
-                      $("#appat").val("");
-                      $("#apmat").val("");
-                      $("#rfc").val("");
-                      $("#numemp").val("");
-                      $("#tarjchek").val("");
-                      $("#nombra").val("Nombramiento");
-                      $("#turno").val("Turno");
-                      $("#adscrip").val("");
-                      $("#email").val("");
-                      $("#celular").val("");
-                      $("#ext").val("");
-                      $("#est").val("Estatus");
-                    }
-                    else{
-                      window.location.href = "index.html";
-                    }
-                }
-            });
+    function insertEmployee() {
+      $.ajax({
+        type: "POST",
+        url: "/addEmployee",
+        data: {
+          name: $("#nom").val(),
+          appat: $("#appat").val(),
+          apmat: $("#apmat").val(),
+          rfc: $("#rfc").val(),
+          num: $("#numemp").val(),
+          tar: $("#tarjchek").val(),
+          nom: $("#nombra").val(),
+          turn: $("#turno").val(),
+          ads: $("#adscrip").val(),
+          email: $("#email").val(),
+          phone: $("#celular").val(),
+          ext: $("#ext").val(),
+          est: $("#est").val()
+        },
+        success: (response) => {
+          if (response.error.length != 0) {
+            errorMessage(response.error[0]);
+          }
+          else if (response.message.length != 0) {
+            notificationMessage(response.message[0]);
+            $("#nom").val("");
+            $("#appat").val("");
+            $("#apmat").val("");
+            $("#rfc").val("");
+            $("#numemp").val("");
+            $("#tarjchek").val("");
+            $("#nombra").val("Nombramiento");
+            $("#turno").val("Turno");
+            $("#adscrip").val("");
+            $("#email").val("");
+            $("#celular").val("");
+            $("#ext").val("");
+            $("#est").val("Estatus");
+          }
+          else {
+            window.location.href = "index.html";
+          }
         }
+      });
+    }
 
-        function errorMessage(message) {
-            let error = `
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    ${message}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            `;
-            $("#message").text("");
-            $("#message").html(error);
-            $("#message").fadeIn(1000, () => {
-                $("#message").fadeOut(3000, () => {
+    function errorMessage(message) {
+            if (Notification) {
+                if (Notification.permission !== "granted") {
+                    Notification.requestPermission();  
+                    let error = `
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `;
                     $("#message").text("");
+                    $("#message").html(error);
+                    $("#message").fadeIn(1000, () => {
+                    $("#message").fadeOut(3000, () => {
+                            $("#message").text("");
+                        });
+                    });
+                }      
+                else{
+                    var title = "Error";
+                    var extra = {
+                        icon: "./img/no.png",
+                        body: message
+                    };
+                    var noti = new Notification(title, extra);
+                    setTimeout(function () { noti.close() }, 10000);
+                } 
+                let audio = new Audio("./sounds/no.mp3");
+                audio.volume = 0.2;
+                audio.play();   
+            }
+            else{
+                let error = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `;
+                $("#message").text("");
+                $("#message").html(error);
+                $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                        $("#message").text("");
+                    });
                 });
-            });
+                let audio = new Audio("./sounds/no.mp3");
+                audio.volume = 0.2;
+                audio.play();  
+            }
         }
+
 
         function notificationMessage(message) {
-            let notification = `
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                ${message}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            `;
-            $("#message").text("");
-            $("#message").html(notification);
-            $("#message").fadeIn(1000, () => {
-                $("#message").fadeOut(3000, () => {
+            if (Notification) {
+                if (Notification.permission !== "granted") {
+                    Notification.requestPermission();
+                    let notification = `
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `;
                     $("#message").text("");
+                    $("#message").html(notification);
+                    $("#message").fadeIn(1000, () => {
+                    $("#message").fadeOut(3000, () => {
+                            $("#message").text("");
+                        });
+                    });
+                }      
+                else{
+                    var title = "Éxito";
+                        var extra = {
+                            icon: "./img/ok.png",
+                            body: message
+                        };
+                        var noti = new Notification(title, extra);
+                        setTimeout(function () { noti.close() }, 10000);
+                }
+                let audio = new Audio("./sounds/ok.mp3");
+                audio.volume = 0.2;
+                audio.play(); 
+            }
+            else{
+                let notification = `
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ${message}
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `;
+                $("#message").text("");
+                $("#message").html(notification);
+                $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                        $("#message").text("");
+                    });
                 });
-            });
+                let audio = new Audio("./sounds/ok.mp3");
+                audio.volume = 0.2;
+                audio.play();
+            }
         }
 
-    </script>
+  </script>
 
 </body>
+
 </html>

@@ -2,7 +2,7 @@
 
 <html lang="es">
 
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Park APP</title>
     <!-- Bootstrap 4 -->
@@ -11,41 +11,47 @@
     <link rel="stylesheet" href="css/all.css">
     <!-- Custom CSS  -->
     <link rel="stylesheet" href="css/main.css">
-  </head>
+</head>
 
-  <body>
+<body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-          <a class="navbar-brand" href="inicioAdmin.html">Tarjetones 2019</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Menu
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="registrarUsuario.html">Agregar Empleado</a>
-                    <a class="dropdown-item" href="empleados.html">Empleados</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
-                  </div>
-                </li>
-            </ul>
-          </div>
+            <a class="navbar-brand" href="inicioAdmin.html">Tarjetones 2019</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="registrarUsuario.html">Agregar Empleado</a>
+                            <a class="dropdown-item" href="empleados.html">Empleados</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </nav>
+    </nav>
 
-      <br>
-      <br>
-      <br>
-      
-      <main style="width: 90%;margin: auto;">
-      
+    <br>
+    <br>
+    <br>
+
+    <main style="width: 90%;margin: auto;">
+
         <div id="message"></div>
+
+        <div><input type="text" placeholder="Búsqueda por número de empleado" class="form-control"
+                onkeyup="search(this.value);"></div>
+        <br>
 
         <div id="content"></div>
 
@@ -58,86 +64,207 @@
 
     <script>
 
-        function getCars(){
+        function getCars() {
             $.ajax({
-                type:"POST",
-                url:"/getCars",
-                success:(response)=>{
-                    if(response.error.length != 0){
+                type: "POST",
+                url: "/getCars",
+                success: (response) => {
+                    if (response.error.length != 0) {
                         errorMessage(response.error[0]);
                     }
-                    else if(response.message.length !=0 ){
+                    else if (response.message.length != 0) {
                         $("#content").text("");
                         $("#content").html(response.message[0]);
                     }
-                    else{
+                    else {
                         window.location.href = "index.html";
                     }
                 }
             });
         }
 
-        function errorMessage(message){
-            let error = `
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    ${message}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            `;
-            $("#message").text("");
-            $("#message").html(error);
-            $("#message").fadeIn(1000,()=>{
-                $("#message").fadeOut(3000,()=>{
+        function errorMessage(message) {
+            if (Notification) {
+                if (Notification.permission !== "granted") {
+                    Notification.requestPermission();  
+                    let error = `
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `;
                     $("#message").text("");
+                    $("#message").html(error);
+                    $("#message").fadeIn(1000, () => {
+                    $("#message").fadeOut(3000, () => {
+                            $("#message").text("");
+                        });
+                    });
+                }      
+                else{
+                    var title = "Error";
+                    var extra = {
+                        icon: "./img/no.png",
+                        body: message
+                    };
+                    var noti = new Notification(title, extra);
+                    setTimeout(function () { noti.close() }, 10000);
+                } 
+                let audio = new Audio("./sounds/no.mp3");
+                audio.volume = 0.2;
+                audio.play();   
+            }
+            else{
+                let error = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `;
+                $("#message").text("");
+                $("#message").html(error);
+                $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                        $("#message").text("");
+                    });
                 });
-            });
+                let audio = new Audio("./sounds/no.mp3");
+                audio.volume = 0.2;
+                audio.play();  
+            }
         }
 
-        function notificationMessage(message){
-            let notification = `
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                ${message}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            `;
-            $("#message").text("");
-            $("#message").html(notification);
-            $("#message").fadeIn(1000,()=>{
-                $("#message").fadeOut(3000,()=>{
+
+        function notificationMessage(message) {
+            if (Notification) {
+                if (Notification.permission !== "granted") {
+                    Notification.requestPermission();
+                    let notification = `
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `;
                     $("#message").text("");
+                    $("#message").html(notification);
+                    $("#message").fadeIn(1000, () => {
+                    $("#message").fadeOut(3000, () => {
+                            $("#message").text("");
+                        });
+                    });
+                }      
+                else{
+                    var title = "Éxito";
+                        var extra = {
+                            icon: "./img/ok.png",
+                            body: message
+                        };
+                        var noti = new Notification(title, extra);
+                        setTimeout(function () { noti.close() }, 10000);
+                }
+                let audio = new Audio("./sounds/ok.mp3");
+                audio.volume = 0.2;
+                audio.play(); 
+            }
+            else{
+                let notification = `
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ${message}
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `;
+                $("#message").text("");
+                $("#message").html(notification);
+                $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                        $("#message").text("");
+                    });
                 });
-            });
+                let audio = new Audio("./sounds/ok.mp3");
+                audio.volume = 0.2;
+                audio.play();
+            }
         }
 
-        function deleteCar(n,m){
+        function deleteCar(n, m) {
             $.ajax({
-                type:"POST",
-                url:"/deleteCar",
-                data:{n:n,m:m},
-                success:(response)=>{
-                    if(response.error.length != 0){
+                type: "POST",
+                url: "/deleteCar",
+                data: { n: n, m: m },
+                success: (response) => {
+                    if (response.error.length != 0) {
                         errorMessage(response.error[0]);
                     }
-                    else if(response.message.length !=0 ){
+                    else if (response.message.length != 0) {
                         notificationMessage(response.message[0]);
                         getCars();
                     }
-                    else{
+                    else {
                         window.location.href = "index.html";
                     }
                 }
             });
         }
 
-        $(document).ready(()=>{
+        function generateQR(m, n, o) {
+            $.ajax({
+                type: "POST",
+                url: "/generateQR",
+                data: { m: m, n: n, o: o },
+                success: (response) => {
+                    console.log(response);
+                    var a = $("<a>")
+                        .attr("href", response.url)
+                        .attr("download", response.name)
+                        .appendTo("body");
+
+                    a[0].click();
+
+                    a.remove();
+
+                }
+            });
+        }
+
+        function search(n) {
+            if (n == "") {
+                getCars();
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "/getCarsSearched",
+                    data: { n: n },
+                    success: (response) => {
+                        if (response.error.length != 0) {
+                            errorMessage(response.error[0]);
+                        }
+                        else if (response.message.length != 0) {
+                            $("#content").text("");
+                            $("#content").html(response.message[0]);
+                        }
+                        else {
+                            window.location.href = "index.html";
+                        }
+                    }
+                });
+            }
+        }
+
+        $(document).ready(() => {
             getCars();
         });
-        
+
     </script>
 
-  </body>
+</body>
+
 </html>

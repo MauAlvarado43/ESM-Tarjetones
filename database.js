@@ -1,5 +1,7 @@
 const mysql = require("mysql");
 const ip = "http://192.168.100.48:3000";
+exports.ip = ip;
+
 
 let connection = mysql.createConnection({
 	host     : 'localhost',
@@ -8,9 +10,11 @@ let connection = mysql.createConnection({
 	database : 'park'
 });
 
+/*
 connection.query(`LOAD DATA LOCAL INFILE 'D:/tarjetones_new/db/baseEstacionamiento.csv' INTO TABLE empleado CHARACTER SET latin1 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES;`,(err)=>{
     if(err){console.log(err);}
 });
+*/
 
 function getActualDate(){
     let date = new Date();
@@ -103,6 +107,20 @@ exports.getEmployees = function(){
     }catch(err){console.log(err);}
 };
 
+exports.getEmployeesSearched = function(num_emp){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("SELECT * FROM empleado WHERE num_emp LIKE ?",num_emp,(err,results,fields)=>{
+                if(err){
+                    console.log(err);
+                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                }
+                resolve(results);
+            });
+        });
+    }catch(err){console.log(err);}
+};
+
 exports.editEmployee = function(num,data){
     try{
         return new Promise((resolve,reject)=>{
@@ -154,6 +172,20 @@ exports.getCars = function(){
     try{
         return new Promise((resolve,reject)=>{
             connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro",(err,results,fields)=>{
+                if(err){
+                    console.log(err);
+                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                }
+                resolve(results);
+            });
+        });
+    }catch(err){console.log(err);}
+};
+
+exports.getCarsSearched = function(num_emp){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro WHERE num_emp LIKE ?",[num_emp],(err,results,fields)=>{
                 if(err){
                     console.log(err);
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});

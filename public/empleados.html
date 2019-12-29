@@ -1,4 +1,6 @@
-<html lang="en" dir="ltr"><head>
+<html lang="en" dir="ltr">
+
+<head>
     <meta charset="utf-8">
     <title>Park APP</title>
     <!-- Bootstrap 4 -->
@@ -8,74 +10,77 @@
     <!-- Custom CSS  -->
     <link rel="stylesheet" href="css/main.css" <="" head="">
     <script data-dapp-detection="">
-        (function() {
-        let alreadyInsertedMetaTag = false
+        (function () {
+            let alreadyInsertedMetaTag = false
 
-        function __insertDappDetected() {
-            if (!alreadyInsertedMetaTag) {
-            const meta = document.createElement('meta')
-            meta.name = 'dapp-detected'
-            document.head.appendChild(meta)
-            alreadyInsertedMetaTag = true
+            function __insertDappDetected() {
+                if (!alreadyInsertedMetaTag) {
+                    const meta = document.createElement('meta')
+                    meta.name = 'dapp-detected'
+                    document.head.appendChild(meta)
+                    alreadyInsertedMetaTag = true
+                }
             }
-        }
 
-        if (window.hasOwnProperty('web3')) {
-            // Note a closure can't be used for this var because some sites like
-            // www.wnyc.org do a second script execution via eval for some reason.
-            window.__disableDappDetectionInsertion = true
-            // Likely oldWeb3 is undefined and it has a property only because
-            // we defined it. Some sites like wnyc.org are evaling all scripts
-            // that exist again, so this is protection against multiple calls.
-            if (window.web3 === undefined) {
-            return
+            if (window.hasOwnProperty('web3')) {
+                // Note a closure can't be used for this var because some sites like
+                // www.wnyc.org do a second script execution via eval for some reason.
+                window.__disableDappDetectionInsertion = true
+                // Likely oldWeb3 is undefined and it has a property only because
+                // we defined it. Some sites like wnyc.org are evaling all scripts
+                // that exist again, so this is protection against multiple calls.
+                if (window.web3 === undefined) {
+                    return
+                }
+                if (!window.web3.currentProvider ||
+                    !window.web3.currentProvider.isMetaMask) {
+                    __insertDappDetected()
+                }
+            } else {
+                var oldWeb3 = window.web3
+                Object.defineProperty(window, 'web3', {
+                    configurable: true,
+                    set: function (val) {
+                        if (!window.__disableDappDetectionInsertion)
+                            __insertDappDetected()
+                        oldWeb3 = val
+                    },
+                    get: function () {
+                        if (!window.__disableDappDetectionInsertion)
+                            __insertDappDetected()
+                        return oldWeb3
+                    }
+                })
             }
-            if (!window.web3.currentProvider ||
-                !window.web3.currentProvider.isMetaMask) {
-            __insertDappDetected()
-            }
-        } else {
-            var oldWeb3 = window.web3
-            Object.defineProperty(window, 'web3', {
-            configurable: true,
-            set: function (val) {
-                if (!window.__disableDappDetectionInsertion)
-                __insertDappDetected()
-                oldWeb3 = val
-            },
-            get: function () {
-                if (!window.__disableDappDetectionInsertion)
-                __insertDappDetected()
-                return oldWeb3
-            }
-            })
-        }
         })()</script>
-    </head>
+</head>
+
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="/">Tarjetones 2019</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Menu
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="registrarUsuario.html">Agregar Empleado</a>
-                  <a class="dropdown-item" href="carros.html">Carros</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
-                </div>
-              </li>
-          </ul>
+        <div class="container">
+            <a class="navbar-brand" href="/">Tarjetones 2019</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="registrarUsuario.html">Agregar Empleado</a>
+                            <a class="dropdown-item" href="carros.html">Carros</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
     </nav>
 
     <br>
@@ -83,40 +88,44 @@
     <br>
 
     <main style="width: 90%;margin: auto;">
-      
+
         <div id="message"></div>
+
+        <div><input type="text" placeholder="Búsqueda por número de empleado" class="form-control"
+                onkeyup="search(this.value);"></div>
+        <br>
 
         <div id="content"></div>
 
     </main>
 
-<!-- Bootstrap 4 javascript -->
-<script src="js/jquery.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+    <!-- Bootstrap 4 javascript -->
+    <script src="js/jquery.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
     <script>
 
-        function getEmployees(){
+        function getEmployees() {
             $.ajax({
                 type: "POST",
-                url : "/getEmployees",
-                success: (response)=>{
-                    if(response==""){
-                        window.location.href="index.html";
+                url: "/getEmployees",
+                success: (response) => {
+                    if (response == "") {
+                        window.location.href = "index.html";
                     }
-                    else if(response.message.length !=0 ){
+                    else if (response.message.length != 0) {
                         $("#content").text("");
                         $("#content").html(response.message[0]);
                     }
-                    else{
+                    else {
                         window.location.href = "index.html";
                     }
                 }
             });
         }
 
-        function moveEmployee(apat,amat,name,num,tar,rfc,dep,fun,est,cel,ext,email,turno){
+        function moveEmployee(apat, amat, name, num, tar, rfc, dep, fun, est, cel, ext, email, turno) {
             $("#content").text("");
             let html = `      
             <div class="col-md-4 mx-auto">
@@ -199,54 +208,54 @@
             $("#est").val(est);
         }
 
-        function editEmployee(){
+        function editEmployee() {
             $.ajax({
-                type:"POST",
-                url:"/editEmployees",
-                data:{
-                    name:  $("#nom").val(),
+                type: "POST",
+                url: "/editEmployees",
+                data: {
+                    name: $("#nom").val(),
                     appat: $("#appat").val(),
                     apmat: $("#apmat").val(),
-                    rfc:   $("#rfc").val(),
-                    num:   $("#numemp").val(),
-                    tar:   $("#tarjchek").val(),
-                    nom:   $("#nombra").val(),
-                    turn:  $("#turno").val(),
-                    ads:   $("#adscrip").val(),
+                    rfc: $("#rfc").val(),
+                    num: $("#numemp").val(),
+                    tar: $("#tarjchek").val(),
+                    nom: $("#nombra").val(),
+                    turn: $("#turno").val(),
+                    ads: $("#adscrip").val(),
                     email: $("#email").val(),
                     phone: $("#celular").val(),
-                    ext:   $("#ext").val(),
-                    est:   $("#est").val()
+                    ext: $("#ext").val(),
+                    est: $("#est").val()
                 },
-                success:(response)=>{
-                    if(response.error.length != 0){
+                success: (response) => {
+                    if (response.error.length != 0) {
                         errorMessage(response.error[0]);
                     }
-                    else if(response.message.length !=0 ){
+                    else if (response.message.length != 0) {
                         notificationMessage(response.message[0]);
                         getEmployees();
                     }
-                    else{
+                    else {
                         window.location.href = "index.html";
                     }
                 }
             });
         }
 
-        function deleteEmployee(num){
+        function deleteEmployee(num) {
             $.ajax({
-                type:"POST",
-                url:"/deleteEmployees",
-                data:{num:num},
-                success:(response)=>{
-                    if(response.error.length != 0){
+                type: "POST",
+                url: "/deleteEmployees",
+                data: { num: num },
+                success: (response) => {
+                    if (response.error.length != 0) {
                         errorMessage(response.error[0]);
                     }
-                    else if(response.message.length !=0 ){
+                    else if (response.message.length != 0) {
                         notificationMessage(response.message[0]);
                         getEmployees();
                     }
-                    else{
+                    else {
                         window.location.href = "index.html";
                     }
                 }
@@ -254,46 +263,147 @@
         }
 
         function errorMessage(message) {
-            let error = `
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    ${message}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            `;
-            $("#message").text("");
-            $("#message").html(error);
-            $("#message").fadeIn(1000, () => {
-                $("#message").fadeOut(3000, () => {
+            if (Notification) {
+                if (Notification.permission !== "granted") {
+                    Notification.requestPermission();  
+                    let error = `
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `;
                     $("#message").text("");
+                    $("#message").html(error);
+                    $("#message").fadeIn(1000, () => {
+                    $("#message").fadeOut(3000, () => {
+                            $("#message").text("");
+                        });
+                    });
+                }      
+                else{
+                    var title = "Error";
+                    var extra = {
+                        icon: "./img/no.png",
+                        body: message
+                    };
+                    var noti = new Notification(title, extra);
+                    setTimeout(function () { noti.close() }, 10000);
+                } 
+                let audio = new Audio("./sounds/no.mp3");
+                audio.volume = 0.2;
+                audio.play();   
+            }
+            else{
+                let error = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `;
+                $("#message").text("");
+                $("#message").html(error);
+                $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                        $("#message").text("");
+                    });
                 });
-            });
+                let audio = new Audio("./sounds/no.mp3");
+                audio.volume = 0.2;
+                audio.play();  
+            }
         }
+
 
         function notificationMessage(message) {
-            let notification = `
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                ${message}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            `;
-            $("#message").text("");
-            $("#message").html(notification);
-            $("#message").fadeIn(1000, () => {
-                $("#message").fadeOut(3000, () => {
+            if (Notification) {
+                if (Notification.permission !== "granted") {
+                    Notification.requestPermission();
+                    let notification = `
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `;
                     $("#message").text("");
+                    $("#message").html(notification);
+                    $("#message").fadeIn(1000, () => {
+                    $("#message").fadeOut(3000, () => {
+                            $("#message").text("");
+                        });
+                    });
+                }      
+                else{
+                    var title = "Éxito";
+                        var extra = {
+                            icon: "./img/ok.png",
+                            body: message
+                        };
+                        var noti = new Notification(title, extra);
+                        setTimeout(function () { noti.close() }, 10000);
+                }
+                let audio = new Audio("./sounds/ok.mp3");
+                audio.volume = 0.2;
+                audio.play(); 
+            }
+            else{
+                let notification = `
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ${message}
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `;
+                $("#message").text("");
+                $("#message").html(notification);
+                $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                        $("#message").text("");
+                    });
                 });
-            });
+                let audio = new Audio("./sounds/ok.mp3");
+                audio.volume = 0.2;
+                audio.play();
+            }
         }
 
-        $(document).ready(()=>{
+        function search(n) {
+            if (n == "") {
+                getEmployees();
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "/getEmployeesSearched",
+                    data: { n: n },
+                    success: (response) => {
+                        if (response == "") {
+                            window.location.href = "index.html";
+                        }
+                        else if (response.message.length != 0) {
+                            $("#content").text("");
+                            $("#content").html(response.message[0]);
+                        }
+                        else {
+                            window.location.href = "index.html";
+                        }
+                    }
+                });
+            }
+        }
+
+        $(document).ready(() => {
             getEmployees();
         });
 
     </script>
 
 </body>
+
 </html>

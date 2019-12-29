@@ -2,7 +2,7 @@
 
 <html lang="es">
 
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Park APP</title>
     <!-- Bootstrap 4 -->
@@ -10,33 +10,34 @@
     <!-- Font Awesome  -->
     <link rel="stylesheet" href="css/all.css">
     <!-- Custom CSS  -->
-    <link rel="stylesheet" href="css/main.css"
-  </head>
-
-  <body>
+    <link rel="stylesheet" href="css/main.css">
+ </head> 
+ <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" id="_home" style="color: white; cursor: pointer;">Tarjetones 2019</a>
-          
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-          
+
             <div class="collapse navbar-collapse" id="navbarNav">
 
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                    <a class="nav-link" id="home" style="cursor: pointer; color: gray;">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" id="home" style="cursor: pointer; color: gray;">Home <span
+                                class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" id="about" style="color: white; cursor: pointer;">About</a>
+                        <a class="nav-link" id="about" style="color: white; cursor: pointer;">About</a>
                     </li>
                 </ul>
 
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                      <a class="nav-link" id="_signin"  style="color: white; cursor: pointer;">Login</a>
+                        <a class="nav-link" id="_signin" style="color: white; cursor: pointer;">Login</a>
                     </li>
                 </ul>
 
@@ -48,14 +49,14 @@
         <div id="message"></div>
         <div class="jumbotron mt-4">
             <h1 class="display-4">Subdirección Administrativa
-              <div class="" style="width: 30%; height: 30%; float:right">
-                <img class="rounded-circle mx-auto d-block logo2 m-4" src="img/logo.jpg" alt="Logo">
-              </div>
+                <div class="" style="width: 30%; height: 30%; float:right">
+                    <img class="rounded-circle mx-auto d-block logo2 m-4" src="img/logo.jpg" alt="Logo">
+                </div>
             </h1>
             <h2 class="lead"> Tarjetones 2019</h2>
             <hr class="my-4">
-            <a class="btn btn-secondary btn-lg" id="signin"  style="color: white; cursor: pointer;"> Ingresar</a>
-          </div>
+            <a class="btn btn-secondary btn-lg" id="signin" style="color: white; cursor: pointer;"> Ingresar</a>
+        </div>
     </main>
 
     <!-- Bootstrap 4 javascript -->
@@ -127,61 +128,61 @@
             </div>
         `;
 
-            $(document).ready(function() {
-                $("#home").click(()=>{
+        $(document).ready(function () {
+            $("#home").click(() => {
                 $("#p-container").text("");
                 $("#p-container").html(home);
-                $("#home").css("color","gray");
-                $("#about").css("color","white");
-                $("#_signin").css("color","white");
+                $("#home").css("color", "gray");
+                $("#about").css("color", "white");
+                $("#_signin").css("color", "white");
                 active = false;
             });
 
-            $("#_home").click(()=>{
+            $("#_home").click(() => {
                 $("#p-container").text("");
                 $("#p-container").html(home);
-                $("#home").css("color","gray");
-                $("#about").css("color","white");
-                $("#_signin").css("color","white");
+                $("#home").css("color", "gray");
+                $("#about").css("color", "white");
+                $("#_signin").css("color", "white");
                 active = false;
             });
 
-            $("#about").click(()=>{
+            $("#about").click(() => {
                 $("#p-container").text("");
                 $("#p-container").html(about);
-                $("#about").css("color","gray");
-                $("#home").css("color","white");
-                $("#_signin").css("color","white");
+                $("#about").css("color", "gray");
+                $("#home").css("color", "white");
+                $("#_signin").css("color", "white");
                 active = false;
             });
 
-            $("#signin").click(()=>{
+            $("#signin").click(() => {
                 $("#p-container").text("");
                 $("#p-container").html(signin);
-                $("#about").css("color","white");
-                $("#_signin").css("color","gray");
-                $("#home").css("color","white");
+                $("#about").css("color", "white");
+                $("#_signin").css("color", "gray");
+                $("#home").css("color", "white");
                 active = true;
             });
 
-            $("#_signin").click(()=>{
+            $("#_signin").click(() => {
                 $("#p-container").text("");
                 $("#p-container").html(signin);
-                $("#about").css("color","white");
-                $("#_signin").css("color","gray");
-                $("#home").css("color","white");
+                $("#about").css("color", "white");
+                $("#_signin").css("color", "gray");
+                $("#home").css("color", "white");
                 active = true;
             });
 
-            $(document).keyup((event)=>{
-                if(event.keyCode == 13 && active){
+            $(document).keyup((event) => {
+                if (event.keyCode == 13 && active) {
                     login();
                 }
             });
 
         });
 
-        function login(){
+        function login() {
             $.ajax({
                 type: "POST",
                 url: "/login",
@@ -189,69 +190,145 @@
                     user: $("#emp").val(),
                     pass: $("#pass").val()
                 },
-                success: (response) => {    
-                    if(response.error.length != 0){
+                success: (response) => {
+                    if (response.error.length != 0) {
                         errorMessage(response.error[0]);
                     }
-                    else{
+                    else {
                         notificationMessage(response.message[0]);
-                        if(response.level == 0){
-                            window.location.href="inicioAdmin.html";
+                        if (response.level == 0) {
+                            window.location.href = "inicioAdmin.html";
                         }
-                        else{
-                            window.location.href="inicioEmpleado.html";
-                        }      
+                        else {
+                            window.location.href = "inicioEmpleado.html";
+                        }
                     }
                 }
             });
         }
 
-        function signinf(){
+        function signinf() {
             $("#p-container").text("");
             $("#p-container").html(signin);
-            $("#about").css("color","white");
-            $("#_signin").css("color","gray");
-            $("#home").css("color","white");
+            $("#about").css("color", "white");
+            $("#_signin").css("color", "gray");
+            $("#home").css("color", "white");
             active = true;
         }
 
-        function errorMessage(message){
-            let error = `
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    ${message}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            `;
-            $("#message").text("");
-            $("#message").html(error);
-            $("#message").fadeIn(1000,()=>{
-                $("#message").fadeOut(3000,()=>{
+        function errorMessage(message) {
+            if (Notification) {
+                if (Notification.permission !== "granted") {
+                    Notification.requestPermission();  
+                    let error = `
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `;
                     $("#message").text("");
+                    $("#message").html(error);
+                    $("#message").fadeIn(1000, () => {
+                    $("#message").fadeOut(3000, () => {
+                            $("#message").text("");
+                        });
+                    });
+                }      
+                else{
+                    var title = "Error";
+                    var extra = {
+                        icon: "./img/no.png",
+                        body: message
+                    };
+                    var noti = new Notification(title, extra);
+                    setTimeout(function () { noti.close() }, 10000);
+                } 
+                let audio = new Audio("./sounds/no.mp3");
+                audio.volume = 0.2;
+                audio.play();   
+            }
+            else{
+                let error = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `;
+                $("#message").text("");
+                $("#message").html(error);
+                $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                        $("#message").text("");
+                    });
                 });
-            });
+                let audio = new Audio("./sounds/no.mp3");
+                audio.volume = 0.2;
+                audio.play();  
+            }
         }
 
-        function notificationMessage(message){
-            let notification = `
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                ${message}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            `;
-            $("#message").text("");
-            $("#message").html(notification);
-            $("#message").fadeIn(1000,()=>{
-                $("#message").fadeOut(3000,()=>{
+
+        function notificationMessage(message) {
+            if (Notification) {
+                if (Notification.permission !== "granted") {
+                    Notification.requestPermission();
+                    let notification = `
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ${message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    `;
                     $("#message").text("");
+                    $("#message").html(notification);
+                    $("#message").fadeIn(1000, () => {
+                    $("#message").fadeOut(3000, () => {
+                            $("#message").text("");
+                        });
+                    });
+                }      
+                else{
+                    var title = "Éxito";
+                        var extra = {
+                            icon: "./img/ok.png",
+                            body: message
+                        };
+                        var noti = new Notification(title, extra);
+                        setTimeout(function () { noti.close() }, 10000);
+                }
+                let audio = new Audio("./sounds/ok.mp3");
+                audio.volume = 0.2;
+                audio.play(); 
+            }
+            else{
+                let notification = `
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        ${message}
+                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `;
+                $("#message").text("");
+                $("#message").html(notification);
+                $("#message").fadeIn(1000, () => {
+                $("#message").fadeOut(3000, () => {
+                        $("#message").text("");
+                    });
                 });
-            });
+                let audio = new Audio("./sounds/ok.mp3");
+                audio.volume = 0.2;
+                audio.play();
+            }
         }
-        
+
     </script>
 
-  </body>
+    </body>
+
 </html>
