@@ -187,7 +187,7 @@ router.post("/getEmployees",(req,res)=>{
 
 router.post("/getEmployeesSearched",(req,res)=>{
     if(req.session.level=="admin"){
-        database.getCarsSearched(req.body.n).then((resolve)=>{
+        database.getEmployeesSearched(req.body.n).then((resolve)=>{
 
             let html = `<table class="table table-sm table-hover table-bordered" style="background-color: white;">
                             <tr>

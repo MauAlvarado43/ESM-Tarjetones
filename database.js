@@ -11,7 +11,8 @@ let connection = mysql.createConnection({
 });
 
 /*
-connection.query(`LOAD DATA LOCAL INFILE 'D:/tarjetones_new/db/baseEstacionamiento.csv' INTO TABLE empleado CHARACTER SET latin1 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES;`,(err)=>{
+connection.query(`LOAD DATA LOCAL INFILE 'D:/tarjetones_new/db/baseEstacionamiento.csv' INTO TABLE empleado CHARACTER SET latin1 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES (apat_emp,
+    amat_emp,nom_emp,num_emp,tar_emp,rfc_emp,fun_emp,est_emp,turno,dep_emp,ext_emp,cel_emp,email);`,(err)=>{
     if(err){console.log(err);}
 });
 */
@@ -110,7 +111,7 @@ exports.getEmployees = function(){
 exports.getEmployeesSearched = function(num_emp){
     try{
         return new Promise((resolve,reject)=>{
-            connection.query("SELECT * FROM empleado WHERE num_emp LIKE ?",num_emp,(err,results,fields)=>{
+            connection.query("SELECT * FROM empleado WHERE num_emp LIKE ?",[num_emp],(err,results,fields)=>{
                 if(err){
                     console.log(err);
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
