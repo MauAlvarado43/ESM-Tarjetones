@@ -187,7 +187,25 @@ router.post("/getProfile",(req,res)=>{
                                 <hr class="my-4">
                                 <div class="form-group" style="text-transform: uppercase;">
                                 Departamento de Adscripción:<br>
-                                <input type="text" id="dep" name="dep" class="form-control" value="${resolve[0].dep_emp}">
+                                <select class="form-control" id="dep" name="dep" required="">
+                                    <option ${(resolve[0].dep_emp=="")?'selected="selected"':''}>Departamento de Adscripción</option>
+                                    <option ${(resolve[0].dep_emp=="Direccion")?'selected="selected"':''}>Direccion</option>
+                                    <option ${(resolve[0].dep_emp=="Decanato")?'selected="selected"':''}>Decanato</option>
+                                    <option ${(resolve[0].dep_emp=="Coordinacion de Enlace y Gestion Tecnica")?'selected="selected"':''}>Coordinacion de Enlace y Gestion Tecnica</option>
+                                    <option ${(resolve[0].dep_emp=="Unidad de Informatica")?'selected="selected"':''}>Unidad de Informatica</option>
+                                    <option ${(resolve[0].dep_emp=="Subdireccion Academica")?'selected="selected"':''}>Subdireccion Academica</option>
+                                    <option ${(resolve[0].dep_emp=="Departamento de Formacion Basica Disciplinaria")?'selected="selected"':''}>Departamento de Formacion Basica Disciplinaria</option>
+                                    <option ${(resolve[0].dep_emp=="Departamento de Formacion Humanistica y Socio-Medica")?'selected="selected"':''}>Departamento de Formacion Humanistica y Socio-Medica</option>
+                                    <option ${(resolve[0].dep_emp=="Departamento de Formacion Especifica en Clinopatologia e Internado Rotatorio")?'selected="selected"':''}>Departamento de Formacion Especifica en Clinopatologia e Internado Rotatorio</option>
+                                    <option ${(resolve[0].dep_emp=="Departamento de Formacion Integral e Institucional")?'selected="selected"':''}>Departamento de Formacion Integral e Institucional</option>
+                                    <option ${(resolve[0].dep_emp=="Departamento de Innovacion Educativa")?'selected="selected"':''}>Departamento de Innovacion Educativa</option>
+                                    <option ${(resolve[0].dep_emp=="Departamento de Evaluacion y Seguimiento Academico")?'selected="selected"':''}>Departamento de Evaluacion y Seguimiento Academico</option>
+                                    <option ${(resolve[0].dep_emp=="Unidad de Tecnologia Educativa y Campus Virtual")?'selected="selected"':''}>Unidad de Tecnologia Educativa y Campus Virtual</option>
+                                    <option ${(resolve[0].dep_emp=="Subdireccion de Servicios Educativos e Integracion Social")?'selected="selected"':''}>Subdireccion de Servicios Educativos e Integracion Social</option>
+                                    <option ${(resolve[0].dep_emp=="Departamento de Gestion Escolar")?'selected="selected"':''}>Departamento de Gestion Escolar</option>
+                                    <option ${(resolve[0].dep_emp=="Departamento de Servicios Estudiantiles")?'selected="selected"':''}>Departamento de Servicios Estudiantiles</option>
+                                    <option ${(resolve[0].dep_emp=="Posgrado")?'selected="selected"':''}>Posgrado</option>
+                                </select>
                                 </div>
                                 <div class="form-group" style="text-transform: uppercase;">
                                 Turno:<br>
@@ -233,7 +251,7 @@ router.post("/updateProfile",(req,res)=>{
     if(req.session.user == null){
         res.send({error:[],message:[]});
     }
-    else if(dep == "" || dep == null || dep == undefined){
+    else if(dep == "" || dep == null || dep == undefined || dep == "Departamento de Adscripción"){
         res.send({error:["Los parámetros no son correctos"],message:[]});
     }
     else if(turn == "" || turn == null || turn == undefined || turn == "Turno"){

@@ -10,12 +10,12 @@ let connection = mysql.createConnection({
 	database : 'park'
 });
 
-/*
-connection.query(`LOAD DATA LOCAL INFILE 'D:/tarjetones_new/db/baseEstacionamiento.csv' INTO TABLE empleado CHARACTER SET latin1 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES (apat_emp,
+
+/*connection.query(`LOAD DATA LOCAL INFILE 'D:/Bátiz/SERVICIO SOCIAL/Proyectos/ESM-tarjetones/tarjetones_new/db/baseEstacionamiento.csv' INTO TABLE empleado CHARACTER SET latin1 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES (apat_emp,
     amat_emp,nom_emp,num_emp,tar_emp,rfc_emp,fun_emp,est_emp,turno,dep_emp,ext_emp,cel_emp,email);`,(err)=>{
     if(err){console.log(err);}
-});
-*/
+});*/
+
 
 function getActualDate(){
     let date = new Date();
@@ -31,18 +31,11 @@ exports.login = function(user,pass){
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                 }
                 if(results.length == 1){
-                    connection.query("SELECT * FROM empleado WHERE rfc_emp = ? AND num_emp = ?",[pass,user],(err2,results2,fields2)=>{
-                        if(err2){
-                            console.log(err2);
-                            resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
-                        }
-                        if(results2.length == 1){
-                            resolve({error:[],message:["Iniciando sesión"],status:1});
-                        }
-                        else{
-                            resolve({error:["La contraseña es incorrecta"],message:[]});
-                        }
-                    });
+                    if(results[0].rfc_emp.trim() == pass.trim()){
+                        resolve({error:[],message:["Iniciando sesión"],status:1});
+                    }else{
+                        resolve({error:["La contraseña es incorrecta"],message:[]});
+                    }
                 }
                 else{
                     resolve({error:["El usuario no existe"],message:[]});
@@ -172,7 +165,7 @@ exports.deleteEmployee = function(num){
 exports.getCars = function(){
     try{
         return new Promise((resolve,reject)=>{
-            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro",(err,results,fields)=>{
+            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro NATURAL JOIN disponibles",(err,results,fields)=>{
                 if(err){
                     console.log(err);
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
@@ -186,7 +179,7 @@ exports.getCars = function(){
 exports.getCarsSearched = function(num_emp){
     try{
         return new Promise((resolve,reject)=>{
-            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro WHERE num_emp LIKE ?",[num_emp],(err,results,fields)=>{
+            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro NATURAL JOIN disponibles WHERE num_emp LIKE ?",[num_emp],(err,results,fields)=>{
                 if(err){
                     console.log(err);
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
@@ -208,7 +201,8 @@ exports.addCar = function(num_emp,brand,sbrand,color,plate){
                     console.log(err);
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                 }
-                connection.query("INSERT INTO registro (id_car,id_emp,fecha) values ("+results.insertId+",(SELECT id_emp FROM empleado WHERE num_emp = ?),'"+date+"')",[num_emp],(err2,results2,fields2)=>{
+                connection.query("INSERT INTO registro (id_car,id_emp,fecha,id_dis) values ("+results.insertId+",(SELECT id_emp FROM empleado WHERE num_emp = ?),'"+date+"',(SELECT id_dis FROM disponibles WHERE used = 0 LIMIT 1))",[num_emp],(err2,results2,fields2)=>{
+                    
                     if(err2){
                         console.log(err2);
                         resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
@@ -217,21 +211,27 @@ exports.addCar = function(num_emp,brand,sbrand,color,plate){
                     connection.query("SELECT * FROM empleado WHERE num_emp = ?",[num_emp],(err3,results3,fields3)=>{
                         
                         if(err3){
-                            console.log(err2);
+                            console.log(err3);
                             resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                         }
 
-                        if(results3.length == 0){
-                            resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
-                        }
-                        else{
-                            var QRCode = require('qrcode');
-                            QRCode.toFile(`./qrCodes/${results3[0].apat_emp}_${results3[0].amat_emp}_${results3[0].nom_emp}_${date.replace(/\:/g,"_").replace(" ",",")}.png`,`${ip}/readQR?xyz=${num_emp}&abc=${results2.insertId}&mno=${results.insertId}`,[{ data: [253,254,255], mode: 'byte' }]);
-                            resolve({error:[],message:["Carro registrado correctamente"]});
-                        }
+                        connection.query("UPDATE disponibles SET used = 1 WHERE id_dis = (SELECT id_dis FROM registro WHERE id_Reg = ?)",[results2.insertId],(err4,results4,fields4)=>{
+                            if(err4){
+                                console.log(err4);
+                                resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                            }
 
+                            if(results3.length == 0){
+                                resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                            }
+                            else{
+                                //var QRCode = require('qrcode');
+                                //QRCode.toFile(`./qrCodes/${results3[0].apat_emp}_${results3[0].amat_emp}_${results3[0].nom_emp}_${date.replace(/\:/g,"_").replace(" ",",")}.png`,`${ip}/readQR?abc=${results2.insertId}`,[{ data: [253,254,255], mode: 'byte' }]);
+                                resolve({error:[],message:["Carro registrado correctamente"]});
+                            }
+
+                        });
                     });
-
                 });
             });
         });
@@ -241,19 +241,35 @@ exports.addCar = function(num_emp,brand,sbrand,color,plate){
 exports.deleteCar = function(id_car,id_reg){
     try{
         return new Promise((resolve,reject)=>{
-            connection.query("DELETE FROM registro WHERE id_reg = ?",[id_reg],(err,results,fields)=>{
-                if(err){
-                    console.log(err);
+
+            connection.query("SELECT * FROM registro WHERE id_reg = ?",[id_reg],(err3,res3,fields3)=>{
+
+                if(err3){
+                    console.log(err3);
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                 }
-                connection.query("DELETE FROM carro WHERE id_car = ?",[id_car],(err2,results2,fields2)=>{
-                    if(err2){
-                        console.log(err2);
+
+                connection.query("DELETE FROM registro WHERE id_reg = ?",[id_reg],(err,results,fields)=>{
+                    if(err){
+                        console.log(err);
                         resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                     }
-                    resolve({error:[],message:["Carro Eliminado correctamente"]});
+                    connection.query("DELETE FROM carro WHERE id_car = ?",[id_car],(err2,results2,fields2)=>{
+                        if(err2){
+                            console.log(err2);
+                            resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                        }
+                        connection.query("DELETE FROM disponibles WHERE id_dis = ?",[res3[0].id_dis],(err4,res4,fields4)=>{
+                            if(err4){
+                                console.log(err4);
+                                resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                            }
+                        });
+                        resolve({error:[],message:["Carro Eliminado correctamente"]});
+                    });
                 });
             });
+
         });
     }catch(err){console.log(err);
     }
@@ -262,7 +278,7 @@ exports.deleteCar = function(id_car,id_reg){
 exports.getCarsByNum = function(num_emp){
     try{
         return new Promise((resolve,reject)=>{
-            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro WHERE num_emp = ?",[num_emp],(err,results,fields)=>{
+            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro NATURAL JOIN disponibles WHERE num_emp = ?",[num_emp],(err,results,fields)=>{
                 if(err){
                     console.log(err);
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
@@ -279,37 +295,103 @@ exports.deleteMyCar = function(id_reg,id_car){
 
             connection.query("SELECT * FROM registro NATURAL JOIN empleado WHERE id_reg = ?",[id_reg],(err3,res3,fls3)=>{
                 try{
-                    require("fs").unlink(`./qrCodes/${res3[0].apat_emp}_${res3[0].amat_emp}_${res3[0].nom_emp}_${res3[0].fecha.replace(" ",",").replace(/\:/g,"_")}.png`,(err4)=>{
-                        if(err4){console.log(err4);}
-                    })
+                    connection.query("DELETE FROM registro WHERE id_reg = ?",[id_reg],(err)=>{
+                        if(err){
+                            console.log(err);
+                            resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                        }
+                        connection.query("DELETE FROM disponibles WHERE id_dis = ?",[res3[0].id_dis],(err4,res4,fields4)=>{
+                            if(err4){
+                                console.log(err4);
+                                resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                            }
+                        });
+                        connection.query("DELETE FROM carro WHERE id_car = ?",[id_car],(err2)=>{
+                            if(err2){
+                                console.log(err2);
+                                resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                            }
+                            resolve({error:[],message:["Carro Eliminado correctamente"]});
+                        });
+                    });
                 }catch(err5){console.log(err5);}
-            });
-
-            connection.query("DELETE FROM registro WHERE id_reg = ?",[id_reg],(err)=>{
-                if(err){
-                    console.log(err);
-                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
-                }
-                connection.query("DELETE FROM carro WHERE id_car = ?",[id_car],(err2)=>{
-                    if(err2){
-                        console.log(err2);
-                        resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
-                    }
-                    resolve({error:[],message:["Carro Eliminado correctamente"]});
-                });
             });
         });
     }catch(err){console.log(err);}
 };
 
-exports.readQR = function(num_emp,id_reg,id_car){
+exports.updateQR = function(id_reg){
     try{
         return new Promise((resolve,reject)=>{
-            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro WHERE num_emp = ? AND id_reg = ? AND id_car = ?",[num_emp,id_reg,id_car],(err,res,fields)=>{
+            connection.query("SELECT * FROM registro WHERE id_reg = ?",[id_reg],(err,results,fields)=>{
+                if(err){
+                    console.log(err);
+                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                }
+
+                let id_dis = results[0].id_dis;
+
+                connection.query("UPDATE registro set id_dis = (SELECT id_dis FROM disponibles WHERE used = 0 LIMIT 1) WHERE id_reg = ?",[id_reg],(err2,results2,fields2)=>{
+                    if(err2){
+                        console.log(err2);
+                        resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                    }
+                    connection.query("UPDATE disponibles set used = 1 WHERE id_dis = (SELECT id_dis FROM registro WHERE id_reg = ?)",[id_reg]);
+                    connection.query("DELETE FROM disponibles WHERE id_dis = ?",[id_dis]);
+                    resolve({error:[],message:["El QR se ha modificado correctamente"]});
+                });
+                
+            });
+            
+        });
+    }catch(err){console.log(err);}
+};
+
+exports.readQR = function(id_reg){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("SELECT * FROM registro NATURAL JOIN empleado NATURAL JOIN carro WHERE id_reg = ? ",[id_reg],(err,res,fields)=>{
                 if(err){
                     console.log(err);
                 }
                 resolve(res);
+            });
+        });
+    }catch(err){console.log(err);}
+};
+
+exports.getAmountQR = function(){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("SELECT COUNT(*) AS amount FROM disponibles WHERE used = 0",(err,res,fields)=>{
+                if(err){
+                    console.log(err);
+                }
+                resolve(res[0].amount);
+            });
+        });
+    }catch(err){console.log(err);}
+};
+
+exports.increaseAmountQR = function(){
+    try{
+        return new Promise((resolve,reject)=>{
+            connection.query("SELECT MAX(id_dis) as maximus FROM disponibles",(err,res,fields)=>{
+                if(err){
+                    console.log(err);
+                    resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                }
+                for(var i = res[0].maximus; i < (res[0].maximus+50); i++){
+                    connection.query("INSERT INTO disponibles (used) VALUES (0)",(err2,res2,fields2)=>{
+                        if(err2){
+                            console.log(err2);
+                            resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+                        }
+                    });
+                    var QRCode = require('qrcode');
+                    QRCode.toFile(`./qrCodes/${i}.png`,`${ip}/readQR?abc=${i}`,[{ data: [253,254,255], mode: 'byte' }]);
+                }
+                resolve({error:[],message:["Se han añadido 50 QR's"]});
             });
         });
     }catch(err){console.log(err);}

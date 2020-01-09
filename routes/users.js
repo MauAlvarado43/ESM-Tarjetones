@@ -51,11 +51,9 @@ router.post("/",(req,res)=>{
 
 router.get("/readQR",(req,res)=>{
 
-  let num_emp = req.query.xyz;
   let id_reg = req.query.abc;
-  let id_car = req.query.mno;
 
-  if(num_emp == null || id_car == null || id_reg == null){
+  if(id_reg == null){
     res.send(`<!DOCTYPE html>
 
       <html lang="es">
@@ -98,7 +96,7 @@ router.get("/readQR",(req,res)=>{
           </html>`);
   }
 
-  else if(num_emp == undefined || id_car == undefined || id_reg == undefined){
+  else if(id_reg == undefined){
     res.send(`<!DOCTYPE html>
 
     <html lang="es">
@@ -142,7 +140,7 @@ router.get("/readQR",(req,res)=>{
   }
 
   else{
-    database.readQR(num_emp,id_reg,id_car).then((resolve)=>{
+    database.readQR(id_reg).then((resolve)=>{
       if(resolve.length==0){
         res.send(`<!DOCTYPE html>
 

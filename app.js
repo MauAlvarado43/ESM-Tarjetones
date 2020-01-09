@@ -29,12 +29,18 @@ app.get("/downloadZIP",(req,res)=>{
 			if(err) {
 				console.log(err);
 			}
-			res.download( __dirname.replace(/\\/g,"/")+'/qrCodes/archive.zip');
+			res.download( __dirname.replace(/\\/g,"/")+'/qrCodes/qrGuardados.zip');
 		});
 	}
 	else{
-		res.send({error:[],message:[]});
+		res.redirect("index.html");
 	}
 });
 
-app.listen(3000,()=>{console.log("Escuchando en el puerto 3000");});
+
+app.listen(3000,()=>{console.log("Escuchando en el puerto 3000");
+//for(var i = 0; i < 1000; i++){
+	//var QRCode = require('qrcode');
+    //QRCode.toFile(`./qrCodes/${i}.png`,`${require('./database').ip}/readQR?abc=${i}`,[{ data: [253,254,255], mode: 'byte' }]);
+//}
+});

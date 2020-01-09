@@ -32,6 +32,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="registrarUsuario.html">Agregar Empleado</a>
                             <a class="dropdown-item" href="empleados.html">Empleados</a>
+                            <a class="dropdown-item" href="/downloadZIP">Descargar QR's</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
                         </div>
@@ -49,8 +50,24 @@
 
         <div id="message"></div>
 
-        <div><input type="text" placeholder="Búsqueda por número de empleado" class="form-control"
-                onkeyup="search(this.value);"></div>
+        <div class="" style="text-align: left; padding-left: 0;">
+            <div class="card">
+                <div class="card-body">
+                    <p class="lead">QR's disponibles: <input type="text" class="form-control" id="amount" readonly> 
+                        <div class="form-group">
+                            <center>
+                                <a onclick="generateMoreQR();" class="btn btn-secondary btn-block">
+                                    Generar QR's
+                                </a>
+                            </center>
+                        </div>
+                    </p>
+                    <input type="text" placeholder="Búsqueda por número de empleado" class="form-control"
+                    onkeyup="search(this.value);" id="search">
+                </div>
+            </div>
+        </div>
+
         <br>
 
         <div id="content"></div>
@@ -75,6 +92,51 @@
                     else if (response.message.length != 0) {
                         $("#content").text("");
                         $("#content").html(response.message[0]);
+                    }
+                    else {
+                        window.location.href = "index.html";
+                    }
+                }
+            });
+        }
+
+        function updateQR(reg){
+            $.ajax({
+                type: "POST",
+                url: "/updateQR",
+                data:{r:reg},
+                success: (response) => {
+                    if (response.error.length != 0) {
+                        errorMessage(response.error[0]);
+                    }
+                    else if (response.message.length != 0) {
+                        notificationMessage(response.message[0]);
+                        if($("#search").val()==""){
+                            getCars();
+                            getAmountQR();
+                        }
+                        else{
+                            search($("#search").val());
+                            getAmountQR();
+                        }
+                    }
+                    else {
+                        window.location.href = "index.html";
+                    }
+                }
+            });
+        }
+
+        function getAmountQR(){
+            $.ajax({
+                type: "POST",
+                url: "/getAmounQR",
+                success: (response) => {
+                    if (response.error.length != 0) {
+                        errorMessage(response.error[0]);
+                    }
+                    else if (response.message.length != 0) {
+                        $("#amount").val(response.message[0]);
                     }
                     else {
                         window.location.href = "index.html";
@@ -259,8 +321,28 @@
             }
         }
 
+        function generateMoreQR(){
+            $.ajax({
+                type: "POST",
+                url: "/increaseAmounQR",
+                success: (response) => {
+                    if (response.error.length != 0) {
+                        errorMessage(response.error[0]);
+                    }
+                    else if (response.message.length != 0) {
+                        notificationMessage(response.message[0]);
+                        window.location.href = "/downloadZIP";
+                    }
+                    else {
+                        window.location.href = "index.html";
+                    }
+                }
+            });
+        }
+
         $(document).ready(() => {
             getCars();
+            getAmountQR();
         });
 
     </script>

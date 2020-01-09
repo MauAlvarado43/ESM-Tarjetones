@@ -74,6 +74,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="registrarUsuario.html">Agregar Empleado</a>
                             <a class="dropdown-item" href="carros.html">Carros</a>
+                            <a class="dropdown-item" href="/downloadZIP">Descargar QR's</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
                         </div>
@@ -126,6 +127,7 @@
         }
 
         function moveEmployee(apat, amat, name, num, tar, rfc, dep, fun, est, cel, ext, email, turno) {
+            console.log(email);
             $("#content").text("");
             let html = `      
             <div class="col-md-4 mx-auto">
@@ -184,7 +186,25 @@
                             </select>
                         </div>
                         <div class="form-group">
-                        <input type="text" name="adscrip" id="adscrip" class="form-control" placeholder="Departamento de Adscripción" required="" value="${dep}">
+                            <select class="form-control" name="adscrip" id="adscrip" required="" value="${dep}">
+                                <option>Departamento de Adscripción</option>
+                                <option>Direccion</option>
+                                <option>Decanato</option>
+                                <option>Coordinacion de Enlace y Gestion Tecnica</option>
+                                <option>Unidad de Informatica</option>
+                                <option>Subdireccion Academica</option>
+                                <option>Departamento de Formacion Basica Disciplinaria</option>
+                                <option>Departamento de Formacion Humanistica y Socio-Medica</option>
+                                <option>Departamento de Formacion Especifica en Clinopatologia e Internado Rotatorio</option>
+                                <option>Departamento de Formacion Integral e Institucional</option>
+                                <option>Departamento de Innovacion Educativa</option>
+                                <option>Departamento de Evaluacion y Seguimiento Academico</option>
+                                <option>Unidad de Tecnologia Educativa y Campus Virtual</option>
+                                <option>Subdireccion de Servicios Educativos e Integracion Social</option>
+                                <option>Departamento de Gestion Escolar</option>
+                                <option>Departamento de Servicios Estudiantiles</option>
+                                <option>Posgrado</option>
+                            </select>
                         </div>
                         <div class="form-group">
                         <input type="email" name="email" id="email" class="form-control" placeholder="correo@ipn.mx" required="" value="${email}">
@@ -202,10 +222,12 @@
                     </div>
                 </div>
                 </div>`;
+                console.log(html);
             $("#content").html(html);
-            $("#nombra").val(fun);
-            $("#turno").val(turno);
-            $("#est").val(est);
+            $("#nombra").val((fun=="")?"Nombramiento":fun);
+            $("#turno").val((turno=="")?"Turno":turno);
+            $("#adscrip").val((dep=="")?"Departamento de Adscripción":dep);
+            $("#est").val((est=="")?"Estado":est);
         }
 
         function editEmployee() {

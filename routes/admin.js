@@ -25,7 +25,7 @@ router.post("/addEmployee",(req,res)=>{
     let bool = true;
 
     array.forEach(element => {
-        if(element == "" || element == null || element == undefined || element=="Turno" || element == "Estatus" || element == "Nombramiento"){
+        if(element == "" || element == null || element == undefined || element=="Turno" || element == "Estatus" || element == "Nombramiento" || element=="Departamento de Adscripción"){
             bool = false;
         }
     });
@@ -66,7 +66,7 @@ router.post("/editEmployees",(req,res)=>{
         let bool = true;
     
         array.forEach(element => {
-            if(element == "" || element == null || element == undefined || element=="Turno" || element == "Estatus" || element == "Nombramiento"){
+            if(element == "" || element == null || element == undefined || element=="Turno" || element == "Estatus" || element == "Nombramiento" || element=="Departamento de Adscripción"){
                 bool = false;
             }
         });
@@ -154,12 +154,8 @@ router.post("/getEmployees",(req,res)=>{
                             <td style="text-align: center; vertical-align: middle">${element.ext_emp}</td>
                             <td style="text-align: center; vertical-align: middle">${element.email}</td>
                             <td style="text-align: center; vertical-align: middle">${element.turno}</td>
-                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;" 
-                            onclick="moveEmployee('${element.apat_emp}','${element.amat_emp}','${element.nom_emp}',${element.num_emp},${element.tar_emp},
-                            '${element.rfc_emp}','${element.dep_emp}','${element.fun_emp}','${element.est_emp}','${element.cel_emp}','${element.ext_emp}',
-                            '${element.email}','${element.turno}');">Modificar</a></td>
-                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;" 
-                            onclick="deleteEmployee(${element.num_emp});">Eliminar</a></td>
+                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;" onclick="moveEmployee('${element.apat_emp}','${element.amat_emp}','${element.nom_emp}',${element.num_emp},${element.tar_emp},'${element.rfc_emp}','${element.dep_emp}','${element.fun_emp}','${element.est_emp}','${element.cel_emp}','${element.ext_emp}','${element.email}','${element.turno}');">Modificar</a></td>
+                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;" onclick="deleteEmployee(${element.num_emp});">Eliminar</a></td>
                         </tr>`;
             });
 
@@ -220,12 +216,8 @@ router.post("/getEmployeesSearched",(req,res)=>{
                             <td style="text-align: center; vertical-align: middle">${element.ext_emp}</td>
                             <td style="text-align: center; vertical-align: middle">${element.email}</td>
                             <td style="text-align: center; vertical-align: middle">${element.turno}</td>
-                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;" 
-                            onclick="moveEmployee('${element.apat_emp}','${element.amat_emp}','${element.nom_emp}',${element.num_emp},${element.tar_emp},
-                            '${element.rfc_emp}','${element.dep_emp}','${element.fun_emp}','${element.est_emp}','${element.cel_emp}','${element.ext_emp}',
-                            '${element.email}','${element.turno}');">Modificar</a></td>
-                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;" 
-                            onclick="deleteEmployee(${element.num_emp});">Eliminar</a></td>
+                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;" onclick="moveEmployee('${element.apat_emp}','${element.amat_emp}','${element.nom_emp}',${element.num_emp},${element.tar_emp},'${element.rfc_emp}','${element.dep_emp}','${element.fun_emp}','${element.est_emp}','${element.cel_emp}','${element.ext_emp}','${element.email}','${element.turno}');">Modificar</a></td>
+                            <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;" onclick="deleteEmployee(${element.num_emp});">Eliminar</a></td>
                         </tr>`;
             });
 
@@ -267,7 +259,8 @@ router.post("/getCarsSearched",(req,res)=>{
                                 <th style="text-align: center; vertical-align: middle">Marca</th>
                                 <th style="text-align: center; vertical-align: middle">SubMarca</th>
                                 <th style="text-align: center; vertical-align: middle">Color</th>
-                                <th style="text-align: center; vertical-align: middle">Generar QR</th>
+                                <th style="text-align: center; vertical-align: middle"># QR</th>
+                                <th style="text-align: center; vertical-align: middle">Reasignar QR</th>
                                 <th style="text-align: center; vertical-align: middle">Eliminar</th>
                             </tr>
             `;
@@ -282,8 +275,9 @@ router.post("/getCarsSearched",(req,res)=>{
                             <td style="text-align: center; vertical-align: middle">${element.marca_car}</td>
                             <td style="text-align: center; vertical-align: middle">${element.smarca_car}</td>
                             <td style="text-align: center; vertical-align: middle">${element.color}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.id_dis}</td>
                             <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;"
-                             onclick="generateQR(${element.id_car},${element.id_reg},${element.num_emp});">Generar QR</a></td>
+                             onclick="updateQR(${element.id_reg});">Reasignar QR</a></td>
                             <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;"
                              onclick="deleteCar(${element.id_car},${element.id_reg});">Eliminar</a></td>
                         </tr>`;
@@ -323,7 +317,8 @@ router.post("/getCars",(req,res)=>{
                                 <th style="text-align: center; vertical-align: middle">Marca</th>
                                 <th style="text-align: center; vertical-align: middle">SubMarca</th>
                                 <th style="text-align: center; vertical-align: middle">Color</th>
-                                <th style="text-align: center; vertical-align: middle">Generar QR</th>
+                                <th style="text-align: center; vertical-align: middle"># QR</th>
+                                <th style="text-align: center; vertical-align: middle">Reasignar QR</th>
                                 <th style="text-align: center; vertical-align: middle">Eliminar</th>
                             </tr>
             `;
@@ -338,8 +333,9 @@ router.post("/getCars",(req,res)=>{
                             <td style="text-align: center; vertical-align: middle">${element.marca_car}</td>
                             <td style="text-align: center; vertical-align: middle">${element.smarca_car}</td>
                             <td style="text-align: center; vertical-align: middle">${element.color}</td>
+                            <td style="text-align: center; vertical-align: middle">${element.id_dis}</td>
                             <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;"
-                             onclick="generateQR(${element.id_car},${element.id_reg},${element.num_emp});">Generar QR</a></td>
+                             onclick="updateQR(${element.id_reg});">Reasignar QR</a></td>
                             <td style="text-align: center; vertical-align: middle"><a class="btn btn-secondary btn-lg" style="color: white; cursor: pointer;"
                              onclick="deleteCar(${element.id_car},${element.id_reg});">Eliminar</a></td>
                         </tr>`;
@@ -391,6 +387,20 @@ router.post("/deleteCar",(req,res)=>{
 
 });
 
+router.post("/updateQR",(req,res)=>{
+    if(req.session.level=="admin"){
+        
+        let id_reg = req.body.r;
+        database.updateQR(id_reg).then((resolve)=>{
+            res.send(resolve);
+        });
+
+    }
+    else{
+        res.send({error:[],message:[]});
+    }
+});
+
 router.post("/generateQR",(req,res)=>{
 
     let id_car = req.body.m;
@@ -411,6 +421,32 @@ router.post("/generateQR",(req,res)=>{
         });
     });
 
+});
+
+router.post("/getAmounQR",(req,res)=>{
+    if(req.session.level=="admin"){
+        
+        database.getAmountQR().then((resolve)=>{
+            res.send({error:[],message:[resolve]});
+        });
+
+    }
+    else{
+        res.send({error:[],message:[]});
+    }
+});
+
+router.post("/increaseAmounQR",(req,res)=>{
+    if(req.session.level=="admin"){
+        
+        database.increaseAmountQR().then((resolve)=>{
+            res.send(resolve);
+        });
+
+    }
+    else{
+        res.send({error:[],message:[]});
+    }
 });
 
 module.exports = router;
