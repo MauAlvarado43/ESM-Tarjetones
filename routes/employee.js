@@ -25,9 +25,16 @@ router.post("/addCar",(req,res)=>{
             res.send({error:["Los parámetros no son correctos"],message:[]});
         }
         else{
-            database.addCar(req.session.user,brand,sbrand,color,plate).then((resolve)=>{
-                res.send(resolve);
-            });
+            database.getCarsByNum(req.session.user).then((resolve2)=>{
+                if(resolve2.length==0){
+                    database.addCar(req.session.user,brand,sbrand,color,plate).then((resolve)=>{
+                        res.send(resolve);
+                    });
+                }
+                else{
+                    res.send({error:["Ya has registrado un vehículo"],message:[]});
+                }
+            })
         }
     }
     else{
@@ -78,9 +85,10 @@ router.post("/getMyCars",(req,res)=>{
                                     <th style="text-align: center; vertical-align: middle">Marca</th>
                                     <th style="text-align: center; vertical-align: middle">SubMarca</th>
                                     <th style="text-align: center; vertical-align: middle">Color</th>
-                                    <th style="text-align: center; vertical-align: middle">Eliminar</th>
+                                    
                                 </tr>
                 `;
+                //<th style="text-align: center; vertical-align: middle">Eliminar</th>
 
                 resolve.forEach(element => {
                     html += `<tr>
@@ -88,10 +96,11 @@ router.post("/getMyCars",(req,res)=>{
                                 <td style="text-align: center; vertical-align: middle">${element.marca_car}</td>
                                 <td style="text-align: center; vertical-align: middle">${element.smarca_car}</td>
                                 <td style="text-align: center; vertical-align: middle">${element.color}</td>
-                                <td style="text-align: center; vertical-align: middle"><input type="button" value="Eliminar"
-                                onclick="deleteMyCar(${element.id_reg},${element.id_car});"></td>
+                                
                             </tr>`;
                 });
+                //<td style="text-align: center; vertical-align: middle"><input type="button" value="Eliminar"
+                //                onclick="deleteMyCar(${element.id_reg},${element.id_car});"></td>
 
                 html += "</table>";
 
@@ -119,22 +128,28 @@ router.post("/getMyCars",(req,res)=>{
 });
 
 router.post("/deleteMyCar",(req,res)=>{
+/*
+    if(req.session.level == "employee"){
 
-    let id_reg = req.body.m;
-    let id_car = req.body.n;
+        let id_reg = req.body.m;
+        let id_car = req.body.n;
 
-    if(id_reg == "" || id_reg == null || id_reg == undefined){
-        res.send({error:["Los parámetros no son correctos"],message:[]});
+        if(id_reg == "" || id_reg == null || id_reg == undefined){
+            res.send({error:["Los parámetros no son correctos"],message:[]});
+        }
+        else if(id_car == "" || id_car == null || id_car == undefined){
+            res.send({error:["Los parámetros no son correctos"],message:[]});
+        }
+        else{
+            database.deleteMyCar(id_reg,id_car).then((resolve)=>{
+                res.send(resolve);
+            });
+        }
     }
-    else if(id_car == "" || id_car == null || id_car == undefined){
-        res.send({error:["Los parámetros no son correctos"],message:[]});
-    }
-    else{
-        database.deleteMyCar(id_reg,id_car).then((resolve)=>{
-            res.send(resolve);
-        });
-    }
-
+    else{*/
+        res.send({error:[],message:[]});
+    /*}
+*/
 });
 
 router.post("/getProfile",(req,res)=>{
@@ -272,6 +287,27 @@ router.post("/updateProfile",(req,res)=>{
         });
     }
 
+});
+
+router.post("/getRegistry",(req,res)=>{
+    if(req.session.level == "employee"){
+        database.getCarsByNum(req.session.user).then((resolve)=>{
+            if(resolve == {error:["Ha ocurrido un error, inténtelo más tarde"],message:[]}){
+                res.send({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
+            }
+            else{
+                if(resolve.length==0 || resolve == null){
+                    res.send({error:[],message:["ok"]});
+                }
+                else{
+                    res.send({error:[],message:["no"]});
+                }
+            }
+        });
+    }
+    else{
+        res.send({error:[],message:[]});
+    }
 });
 
 module.exports = router;

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 
-<body>
+<body id="body">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -30,7 +30,8 @@
                             Menu
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="registrarUsuario.html">Agregar Empleado</a>
+                            <a class="dropdown-item" href="registrarVehiculo.html">Registrar Vehículo</a>
+                            <a class="dropdown-item" href="registrarEmpleado.html">Registrar Empleado</a>
                             <a class="dropdown-item" href="empleados.html">Empleados</a>
                             <a class="dropdown-item" href="/downloadZIP">Descargar QR's</a>
                             <div class="dropdown-divider"></div>
@@ -78,7 +79,7 @@
     <script src="js/jquery.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-
+    <script src="js/print.min.js"></script>
     <script>
 
         function getCars() {
@@ -282,7 +283,6 @@
                 url: "/generateQR",
                 data: { m: m, n: n, o: o },
                 success: (response) => {
-                    console.log(response);
                     var a = $("<a>")
                         .attr("href", response.url)
                         .attr("download", response.name)
@@ -322,16 +322,18 @@
         }
 
         function generateMoreQR(){
+            $("#body").css("cursor","wait");
             $.ajax({
                 type: "POST",
                 url: "/increaseAmounQR",
                 success: (response) => {
+                    $("#body").css("cursor","auto");
+                    getAmountQR();
                     if (response.error.length != 0) {
                         errorMessage(response.error[0]);
                     }
                     else if (response.message.length != 0) {
-                        notificationMessage(response.message[0]);
-                        window.location.href = "/downloadZIP";
+                        window.location.href = "/downloadPDF2";
                     }
                     else {
                         window.location.href = "index.html";

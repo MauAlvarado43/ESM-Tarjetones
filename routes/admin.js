@@ -348,7 +348,7 @@ router.post("/getCars",(req,res)=>{
                             <div class="card mx-auto">
                                 <div class="card-body">
                                 <!--<h1>Hello </h1>-->
-                                <p class="lead">No hay carros aun!</p>
+                                <p class="lead">No hay Vehículos aun!</p>
                             </div>
                         </div>`;
             }
@@ -437,16 +437,54 @@ router.post("/getAmounQR",(req,res)=>{
 });
 
 router.post("/increaseAmounQR",(req,res)=>{
-    if(req.session.level=="admin"){
-        
+    if(req.session.level=="admin"){    
         database.increaseAmountQR().then((resolve)=>{
             res.send(resolve);
+        });
+    }
+    else{
+        res.send({error:[],message:[]});
+    }
+});
+
+router.get("/downloadPDF1",(req,res)=>{
+    if(req.session.level=="admin"){    
+        res.download("qrs.pdf");
+    }
+    else{
+        res.send({error:[],message:[]});
+    }   
+});
+router.get("/downloadPDF2",(req,res)=>{
+    if(req.session.level=="admin"){    
+        res.download("qrs_2.pdf");
+    }
+    else{
+        res.send({error:[],message:[]});
+    }   
+});
+
+router.post("/checkEmployee",(req,res)=>{
+
+    let num_emp = req.body.emp;
+
+    if(req.session.level=="admin"){
+        
+        database.getEmployeeByNumber(num_emp).then((resolve)=>{
+        
+            if(resolve==null || resolve.length==0){
+                res.send({error:[],message:[""]});
+            }
+            else{
+                res.send({error:[],message:[resolve[0].apat_emp+" "+resolve[0].amat_emp+" "+" "+resolve[0].nom_emp]});
+            }
         });
 
     }
     else{
         res.send({error:[],message:[]});
     }
+
 });
 
 module.exports = router;

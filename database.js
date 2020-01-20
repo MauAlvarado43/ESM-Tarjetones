@@ -10,7 +10,6 @@ let connection = mysql.createConnection({
 	database : 'park'
 });
 
-
 /*connection.query(`LOAD DATA LOCAL INFILE 'D:/Bátiz/SERVICIO SOCIAL/Proyectos/ESM-tarjetones/tarjetones_new/db/baseEstacionamiento.csv' INTO TABLE empleado CHARACTER SET latin1 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES (apat_emp,
     amat_emp,nom_emp,num_emp,tar_emp,rfc_emp,fun_emp,est_emp,turno,dep_emp,ext_emp,cel_emp,email);`,(err)=>{
     if(err){console.log(err);}
@@ -31,7 +30,7 @@ exports.login = function(user,pass){
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                 }
                 if(results.length == 1){
-                    if(results[0].rfc_emp.trim() == pass.trim()){
+                    if(results[0].rfc_emp.trim().substring(0,results[0].rfc_emp.trim().length-3) == pass.trim()){
                         resolve({error:[],message:["Iniciando sesión"],status:1});
                     }else{
                         resolve({error:["La contraseña es incorrecta"],message:[]});
@@ -381,17 +380,191 @@ exports.increaseAmountQR = function(){
                     console.log(err);
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                 }
-                for(var i = res[0].maximus; i < (res[0].maximus+50); i++){
-                    connection.query("INSERT INTO disponibles (used) VALUES (0)",(err2,res2,fields2)=>{
+                for(var i = res[0].maximus+1; i <= (res[0].maximus+30); i++){
+                    connection.query("INSERT INTO disponibles (id_dis,used) VALUES ("+i+",0)",(err2,res2,fields2)=>{
                         if(err2){
                             console.log(err2);
                             resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                         }
                     });
-                    var QRCode = require('qrcode');
-                    QRCode.toFile(`./qrCodes/${i}.png`,`${ip}/readQR?abc=${i}`,[{ data: [253,254,255], mode: 'byte' }]);
+                    var qr = require('qr-image-color');
+                    var png_string = qr.image(`${require('./database').ip}/readQR?abc=${i}`, { type: 'png', color: "white",size:7, transparent: true });
+                    png_string.pipe(require('fs').createWriteStream(`./qrCodes/${i}.png`));
+                    if(i==(res[0].maximus+30)){
+                        let pdf = require('html-pdf');
+                        let html = `<!DOCTYPE html>
+                                    <html lang="en">
+                                    <head>
+                                        <meta charset="UTF-8">
+                                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                                        <title>Document</title>
+                                    </head>
+                                    <body>
+                                        <style>
+                                            @font-face {
+                                                font-family: 'Montserrat';
+                                                src: url('file:///${__dirname.replace(/\\/g,"/")}/template/Montserrat-Bold.ttf') format('truetype');
+                                                font-weight: bold;
+                                                font-style: normal;
+                                            }
+                                            table{
+                                                border-color:transparent;
+                                                border-spacing: 2px 6px;
+                                            }
+                                            h2{
+                                                font-family: 'Montserrat';
+                                                color: white;
+                                                margin-bottom: 0;
+                                                padding-bottom: 0;
+                                                font-size:14px;
+                                            }
+                                            img{
+                                                vertical-align: middle;
+                                                margin-bottom: 0;
+                                            }
+                                            h3{
+                                                font-family: 'Montserrat';
+                                                color: white;
+                                                margin-top: 0;
+                                                padding-top: 0;
+                                                margin-bottom: 0;
+                                                font-size:12px;
+                                            }
+                                            h1{
+                                                font-family: 'Montserrat';
+                                                color: white;
+                                                margin-top: 0;
+                                                padding-top: 0;
+                                                margin-bottom: 0;
+                                                font-size:14px;
+                                            }
+                                        </style>
+                                        `;
+                                        let options = {    
+                                            format: 'Tabloid',
+                                            base: "file:///"+__dirname.replace(/\\/g,"/"),
+                                            type: "pdf",
+                                            orientation: "landscape",
+                                            border: {
+                                                top: "2cm",
+                                                right: "0.01in",
+                                                bottom: "2cm",
+                                                left: "0.01in"
+                                            },
+                                            footer: {
+                                                height: "0in",
+                                            }
+                                        };
+
+                                        for(var j = res[0].maximus+1; j <= res[0].maximus+30; j++){
+                                            let color = "";
+                                            let number = "";
+                                        
+                                            if(j<=res[0].maximus+5){color="#75125C";}
+                                            else if(j<=res[0].maximus+10){color="#005B96";}
+                                            else if(j<=res[0].maximus+15){color="#BB1E1E";}
+                                            else if(j<=res[0].maximus+20){color="#00A86B";}
+                                            else if(j<=res[0].maximus+25){color="#E1A02C";}
+                                            else if(j<=res[0].maximus+30){color="#6C5834";}
+                                        
+                                            if(j<10){
+                                                number="00"+j+"";
+                                            }
+                                            else if(j<100){
+                                                number="0"+j+"";
+                                            }
+                                            else{
+                                                number = j+"";
+                                            }
+                                            if(j==res[0].maximus+1){
+                                                html+=`
+                                                <table border="1">
+                                                    <tr>
+                                                    <td style=" background-color: ${color};">
+                                                        <center>
+                                                            <h2>&nbsp;<img src="file:///${__dirname.replace(/\\/g,"/")}/template/ipn-logo.png" width="30" height="45">&nbsp;Instituto Politécnico Nacional&nbsp;&nbsp;</h2>
+                                                            <h3>&nbsp;&nbsp;&nbsp;&nbsp;Escuela Superior de Medicina</h3>
+                                                            <img src="file:///${__dirname.replace(/\\/g,"/")}/qrCodes/${j}.png" width="150" height="150">
+                                                            <h1>${number}</h1>
+                                                            <br>
+                                                        </center>
+                                                    </td>
+                                                `;
+                                            }
+                                            else if(j==res[0].maximus+18){
+                                                html+=`
+                                                        <td style=" background-color: ${color};">
+                                                            <center>
+                                                                <h2>&nbsp;<img src="file:///${__dirname.replace(/\\/g,"/")}/template/ipn-logo.png" width="30" height="45">&nbsp;Instituto Politécnico Nacional&nbsp;&nbsp;</h2>
+                                                                <h3>&nbsp;&nbsp;&nbsp;&nbsp;Escuela Superior de Medicina</h3>
+                                                                <img src="file:///${__dirname.replace(/\\/g,"/")}/qrCodes/${j}.png" width="150" height="150">
+                                                                <h1>${number}</h1>
+                                                                <br>
+                                                            </center>
+                                                        </td>
+                                                    </tr>
+                                                    </table>
+                                                    <p style="page-break-after: always;"></p>
+                                                    <table border="1">
+                                                    <tr>
+                                                `;
+                                            }
+                                            else if(j==res[0].maximus+6 || j==res[0].maximus+12 || j==res[0].maximus+24){
+                                                html+=`
+                                                        <td style=" background-color: ${color};">
+                                                            <center>
+                                                                <h2>&nbsp;<img src="file:///${__dirname.replace(/\\/g,"/")}/template/ipn-logo.png" width="30" height="45">&nbsp;Instituto Politécnico Nacional&nbsp;&nbsp;</h2>
+                                                                <h3>&nbsp;&nbsp;&nbsp;&nbsp;Escuela Superior de Medicina</h3>
+                                                                <img src="file:///${__dirname.replace(/\\/g,"/")}/qrCodes/${j}.png" width="150" height="150">
+                                                                <h1>${number}</h1>
+                                                                <br>
+                                                            </center>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                `;
+                                            }
+                                            else if(j==i){
+                                                html+=`
+                                                        <td style=" background-color: ${color};">
+                                                            <center>
+                                                                <h2>&nbsp;<img src="file:///${__dirname.replace(/\\/g,"/")}/template/ipn-logo.png" width="30" height="45">&nbsp;Instituto Politécnico Nacional&nbsp;&nbsp;</h2>
+                                                                <h3>&nbsp;&nbsp;&nbsp;&nbsp;Escuela Superior de Medicina</h3>
+                                                                <img src="file:///${__dirname.replace(/\\/g,"/")}/qrCodes/${j}.png" width="150" height="150">
+                                                                <h1>${number}</h1>
+                                                                <br>
+                                                            </center>
+                                                        </td>
+                                                    </tr>
+                                                    </table>
+                                                </body>
+                                                </html>
+                                                `;
+
+                                                pdf.create(html, options).toFile('./qrs_2.pdf', function(err, reso) {
+                                                    if (err) {console.log(err);}
+                                                    resolve({error:[],message:[""]});
+                                                });
+                                        
+                                            }
+                                            else{
+                                                html+=`
+                                                <td style=" background-color: ${color};">
+                                                    <center>
+                                                        <h2>&nbsp;<img src="file:///${__dirname.replace(/\\/g,"/")}/template/ipn-logo.png" width="30" height="45">&nbsp;Instituto Politécnico Nacional&nbsp;&nbsp;</h2>
+                                                        <h3>&nbsp;&nbsp;&nbsp;&nbsp;Escuela Superior de Medicina</h3>
+                                                        <img src="file:///${__dirname.replace(/\\/g,"/")}/qrCodes/${j}.png" width="150" height="150">
+                                                        <h1>${number}</h1>
+                                                        <br>
+                                                    </center>
+                                                </td>
+                                                `;
+                                            }
+                                        }
+
+                    }
                 }
-                resolve({error:[],message:["Se han añadido 50 QR's"]});
             });
         });
     }catch(err){console.log(err);}

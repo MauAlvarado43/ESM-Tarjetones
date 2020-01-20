@@ -27,8 +27,8 @@
               Menu
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="registrarCarro.html">Registrar carro</a>
-              <a class="dropdown-item" href="verCarros.html">Ver carros</a>
+              <a class="dropdown-item" href="registrarMiVehiculo.html" id="cars">Registrar carro</a>
+              <a class="dropdown-item" href="misVehiculos.html">Ver carros</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
             </div>
@@ -203,6 +203,30 @@ function errorMessage(message) {
         }
       });
     });
+
+    if(window.sessionStorage.getItem("already") == undefined || window.sessionStorage.getItem("already") == null){
+        $.ajax({
+            type: "POST",
+            url: "/getRegistry",
+            success: (response) => {
+                if (response.error.length != 0) {
+                    errorMessage(response.error[0]);
+                }
+                else{
+                    if(response.message[0]=="ok"){
+                        
+                    }
+                    else{
+                        window.sessionStorage.setItem("already",true);
+                        $("#cars").remove();
+                    }
+                }
+            }
+            });
+    }
+    else if (window.sessionStorage.getItem("already") == "true"){
+        $("#cars").remove();
+    }
 
   </script>
 

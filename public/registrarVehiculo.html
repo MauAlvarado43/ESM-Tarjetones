@@ -10,11 +10,14 @@
     <!-- Font Awesome  -->
     <link rel="stylesheet" href="css/all.css">
     <!-- Custom CSS  -->
-    <link rel="stylesheet" href="css/main.css"> </head> <body>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="inicioAdmin.html">Tarjetones 2019</a>
+            <a class="navbar-brand" href="inicioEmpleado.html">Tarjetones 2019</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -27,7 +30,6 @@
                             Menu
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="registrarVehiculo.html">Registrar Vehículo</a>
                             <a class="dropdown-item" href="registrarEmpleado.html">Registrar Empleado</a>
                             <a class="dropdown-item" href="empleados.html">Empleados</a>
                             <a class="dropdown-item" href="vehiculos.html">Vehículos</a>
@@ -42,16 +44,45 @@
     </nav>
 
     <main class="container p-5" id="p-container">
-        <div id="message"></div>
-        <div class="jumbotron mt-4">
-            <h1 class="display-4">Subdirección Administrativa
-                <div class="" style="width: 30%; height: 30%; float:right">
-                    <img class="rounded-circle mx-auto d-block logo2 m-4" src="img/logo.jpg" alt="Logo">
+        <div class="col-md-4 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Vehículo</h3>
                 </div>
-            </h1>
-            <h2 class="lead"> Tarjetones 2019</h2>
-            <hr class="my-4">
-            <div id="welcome"></div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-group">
+                            <input type="text" id="placa" name="placa" class="form-control"
+                                placeholder="Placa Vehicular (sin guiones)" autofocus required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="marca" name="marca" class="form-control" placeholder="Marca"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="smarca" name="smarca" class="form-control" placeholder="Submarca"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="color" name="color" class="form-control" placeholder="Color"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="emp" name="emp" class="form-control"
+                                placeholder="Número de empleado" onkeyup="checkEmployee();" autofocus required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" class="form-control"
+                                placeholder="Nombre de empleado" onkeyup="checkEmployee();" autofocus required readonly>
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn-secondary btn-block" onclick="addCar();">
+                                Guardar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -62,139 +93,54 @@
 
     <script>
 
-        let home = `        
-            <div id="message"></div>
-            <div class="jumbotron mt-4">
-                <h1 class="display-4">Subdirección Administrativa
-                <div class="" style="width: 30%; height: 30%; float:right">
-                    <img class="rounded-circle mx-auto d-block logo2 m-4" src="img/logo.jpg" alt="Logo">
-                </div>
-                </h1>
-                <h2 class="lead"> Tarjetones 2019</h2>
-                <hr class="my-4">
-                <a class="btn btn-secondary btn-lg" id="signin"  style="color: white; cursor: pointer;" onclick="signinf();">Ingresar</a>
-            </div>
-        `;
-
-        let about = `
-            <div id="message"></div>
-            <div class="jumbotron mt-4">
-                <h1 class="display-4">Escuela Superior de Medicina
-                    <div class="" style="width: 30%; height: 30%; float:right">
-                    <img class="rounded-circle mx-auto d-block logo2 m-4" src="img/logo.jpg" alt="Logo">
-                    </div>
-                </h1>
-                <hr class="my-4">
-                <p class="h3">Dr. Juan Garcia Cavazos</p>
-                <p class="h5" style="color:gray">Director</p>
-                <p class="h5">Dra. Rosa Garcia y Gallardo</p>
-                <p class="h6" style="color:gray">Subdirectora Administrativa</p>
-                <p class="h6">Ing. Giovanni Rojas Resendiz</p>
-                <p class="h7" style="color:gray">Desarrollador de Aplicacion</p>
-                <hr class="my-4">
-                <p>
-                    Escuela Superior de Medicina - Subdirección Administrativa
-                </p>
-                <p>
-                    IPN 2019 ParkAPP by Giovanni Rojas
-                </p>
-
-            </div>
-        `;
-
-        let signin = `
-            <div id="message"></div>
-            <div class="row">
-                <div class="col-md-4 mx-auto">
-                    <div class="card mt-4 text-center">
-                        <img class="rounded-circle mx-auto d-block logo m-4" src="img/logo.jpg" alt="Logo">
-                    <div class="card-body">
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="emp" placeholder="Empleado" id="emp" autofocus required>
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control" name="password" id="pass" placeholder="Password" required>
-                        </div>
-                        <a class="btn btn-secondary btn-block" id="login" style="color:white;" onclick="login();">Iniciar Sesión</a>
-                    </div>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        $(document).ready(function () {
-            $("#home").click(() => {
-                $("#p-container").text("");
-                $("#p-container").html(home);
-                $("#home").css("color", "gray");
-                $("#about").css("color", "white");
-                $("#_signin").css("color", "white");
-            });
-
-            $("#_home").click(() => {
-                $("#p-container").text("");
-                $("#p-container").html(home);
-                $("#home").css("color", "gray");
-                $("#about").css("color", "white");
-                $("#_signin").css("color", "white");
-            });
-
-            $("#about").click(() => {
-                $("#p-container").text("");
-                $("#p-container").html(about);
-                $("#about").css("color", "gray");
-                $("#home").css("color", "white");
-                $("#_signin").css("color", "white");
-            });
-
-            $("#signin").click(() => {
-                $("#p-container").text("");
-                $("#p-container").html(signin);
-                $("#about").css("color", "white");
-                $("#_signin").css("color", "gray");
-                $("#home").css("color", "white");
-            });
-
-            $("#_signin").click(() => {
-                $("#p-container").text("");
-                $("#p-container").html(signin);
-                $("#about").css("color", "white");
-                $("#_signin").css("color", "gray");
-                $("#home").css("color", "white");
-            });
-        });
-
-        function login() {
+        function checkEmployee(){
             $.ajax({
                 type: "POST",
-                url: "/login",
+                url: "/checkEmployee",
                 data: {
-                    user: $("#emp").val(),
-                    pass: $("#pass").val()
+                    emp: $("#emp").val(),
                 },
                 success: (response) => {
                     if (response.error.length != 0) {
                         errorMessage(response.error[0]);
                     }
+                    else if (response.message.length != 0) {
+                        $("#name").val(response.message[0]);
+                    }
                     else {
-                        notificationMessage(response.message[0]);
-                        if (response.level == 0) {
-                            window.location.href = "registrarUsuario.html";
-                        }
-                        else {
-                            window.location.href = "registrarCarro.html";
-                        }
+                        window.location.href = "index.html";
                     }
                 }
             });
         }
 
-        function signinf() {
-            $("#p-container").text("");
-            $("#p-container").html(signin);
-            $("#about").css("color", "white");
-            $("#_signin").css("color", "gray");
-            $("#home").css("color", "white");
+        function addCar() {
+            $.ajax({
+                type: "POST",
+                url: "/addVehicle",
+                data: {
+                    brand: $("#marca").val(),
+                    sbrand: $("#smarca").val(),
+                    color: $("#color").val(),
+                    plate: $("#placa").val()
+                },
+                success: (response) => {
+                    if (response.error.length != 0) {
+                        errorMessage(response.error[0]);
+                    }
+                    else if (response.message.length != 0) {
+                        notificationMessage(response.message[0]);
+                        $("#marca").val("");
+                        $("#smarca").val("");
+                        $("#color").val("");
+                        $("#placa").val("");
+                        window.location.href = "verCarros.html";
+                    }
+                    else {
+                        window.location.href = "index.html";
+                    }
+                }
+            });
         }
 
         function errorMessage(message) {
@@ -308,21 +254,8 @@
             }
         }
 
-        $.ajax({
-            type: "POST",
-            url: "/getUser",
-            success: (resolve) => {
-                if (resolve != null) {
-                    $("#welcome").text("¡Bienvenido " + resolve + "!");
-                }
-                else {
-                    window.location.href = "index.html";
-                }
-            }
-        });
-
     </script>
 
-    </body>
+</body>
 
 </html>

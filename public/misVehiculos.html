@@ -3,116 +3,64 @@
 <html lang="es">
 
 <head>
-    <meta charset="utf-8">
-    <title>Park APP</title>
-    <!-- Bootstrap 4 -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- Font Awesome  -->
-    <link rel="stylesheet" href="css/all.css">
-    <!-- Custom CSS  -->
-    <link rel="stylesheet" href="css/main.css">
+  <meta charset="utf-8">
+  <title>Park APP</title>
+  <!-- Bootstrap 4 -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- Font Awesome  -->
+  <link rel="stylesheet" href="css/all.css">
+  <!-- Custom CSS  -->
+  <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="inicioEmpleado.html">Tarjetones 2019</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Menu
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="perfil.html">Perfil</a>
-                            <a class="dropdown-item" href="verCarros.html">Ver carros</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
-                        </div>
-                    </li>
-                </ul>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="inicioEmpleado.html">Tarjetones 2019</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Menu
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="perfil.html">Perfil</a>
+              <a class="dropdown-item" href="registrarMiVehiculo.html" id="cars">Registrar carro</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/logout">Cerrar Sesión</a>
             </div>
-        </div>
-    </nav>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-    <main class="container p-5" id="p-container">
-        <div class="col-md-4 mx-auto">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Automovil</h3>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="form-group">
-                            <input type="text" id="placa" name="placa" class="form-control"
-                                placeholder="Placa Vehicular (sin guiones)" autofocus required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="marca" name="marca" class="form-control" placeholder="Marca"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="smarca" name="smarca" class="form-control" placeholder="Submarca"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="color" name="color" class="form-control" placeholder="Color"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <a class="btn btn-secondary btn-block" onclick="addCar();">
-                                Guardar
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </main>
+  <br>
+  <br>
+  <br>
 
-    <!-- Bootstrap 4 javascript -->
-    <script src="js/jquery.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+  <main style="width: 90%;margin: auto;">
 
-    <script>
+    <div id="message"></div>
 
-        function addCar() {
-            $.ajax({
-                type: "POST",
-                url: "/addCar",
-                data: {
-                    brand: $("#marca").val(),
-                    sbrand: $("#smarca").val(),
-                    color: $("#color").val(),
-                    plate: $("#placa").val()
-                },
-                success: (response) => {
-                    if (response.error.length != 0) {
-                        errorMessage(response.error[0]);
-                    }
-                    else if (response.message.length != 0) {
-                        notificationMessage(response.message[0]);
-                        $("#marca").val("");
-                        $("#smarca").val("");
-                        $("#color").val("");
-                        $("#placa").val("");
-                        window.location.href = "verCarros.html";
-                    }
-                    else {
-                        window.location.href = "index.html";
-                    }
-                }
-            });
-        }
+    <div id="content"></div>
 
-        function errorMessage(message) {
+  </main>
+
+  <!-- Bootstrap 4 javascript -->
+  <script src="js/jquery.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+
+  <script>
+
+function errorMessage(message) {
             if (Notification) {
                 if (Notification.permission !== "granted") {
                     Notification.requestPermission();  
@@ -223,7 +171,73 @@
             }
         }
 
-    </script>
+    function getMyCars() {
+      $.ajax({
+        type: "POST",
+        url: "/getMyCars",
+        success: (response) => {
+          if (response.error.length != 0) {
+            errorMessage(response.error[0]);
+          }
+          else if (response.message.length != 0) {
+            $("#content").text("");
+            $("#content").html(response.message[0]);
+          }
+          else {
+            window.location.href = "index.html";
+          }
+        }
+      });
+    }
+
+    function deleteMyCar(m, n) {
+      $.ajax({
+        type: "POST",
+        url: "/deleteMyCar",
+        data: { m: m, n: n },
+        success: (response) => {
+          if (response.error.length != 0) {
+            errorMessage(response.error[0]);
+          }
+          else if (response.message.length != 0) {
+            notificationMessage(response.message[0]);
+            getMyCars();
+          }
+          else {
+            window.location.href = "index.html";
+          }
+        }
+      });
+    }
+
+    $(document).ready(() => {
+      getMyCars();
+      if(window.sessionStorage.getItem("already") == undefined || window.sessionStorage.getItem("already") == null){
+        $.ajax({
+            type: "POST",
+            url: "/getRegistry",
+            success: (response) => {
+                if (response.error.length != 0) {
+                    errorMessage(response.error[0]);
+                }
+                else{
+                    if(response.message[0]=="ok"){
+                        
+                    }
+                    else{
+                        window.sessionStorage.setItem("already",true);
+                        $("#cars").remove();
+                    }
+                }
+            }
+            });
+    }
+    else if (window.sessionStorage.getItem("already") == "true"){
+        $("#cars").remove();
+    }
+    });
+
+  </script>
 
 </body>
 
