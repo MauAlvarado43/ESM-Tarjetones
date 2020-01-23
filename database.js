@@ -300,6 +300,12 @@ exports.deleteMyCar = function(id_reg,id_car){
                             resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                         }
                         connection.query("DELETE FROM disponibles WHERE id_dis = ?",[res3[0].id_dis],(err4,res4,fields4)=>{
+                            require("fs").unlink(`./qrCodes/${res3[0].id_dis}.png`);
+                            let json = JSON.parse(require("fs").readFileSync("./keys/signs.json"));
+                            json.splice((res3[0].id_dis-1),1);
+                            require("fs").writeFile("./keys/signs.json",JSON.stringify(json),(err)=>{
+                                if(err){console.log(err);}
+                            });
                             if(err4){
                                 console.log(err4);
                                 resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
