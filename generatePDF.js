@@ -3,6 +3,7 @@ const _colors = require("chalk");
 const cliProgress = require('cli-progress');
 const ora = require('ora');
 
+//Barra de progreso para generar el HTML con toda la información
 var b1 = new cliProgress.SingleBar({
     format: _colors.red("Generando HTML |") + _colors.blue('{bar}') + "| {percentage}% | {value}/{total} | Faltan aproximadamente {eta} s",
     barCompleteChar: '\u2588',
@@ -11,6 +12,7 @@ var b1 = new cliProgress.SingleBar({
     hideCursor: true
 });
 
+//Declaración del html con css incluído
 let html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,6 +63,7 @@ let html = `<!DOCTYPE html>
     </style>
     `;
 
+//Opciones de guardado del PDF
 let options = {    
 	format: 'Tabloid',
 	base: "file:///"+__dirname.replace(/\\/g,"/"),
@@ -81,12 +84,15 @@ b1.start(800, 0,{
     speed:"N/A"
 });
 
+//Concatenar los 800 registros
 for(var i = 1; i <= 800; i++){
 
     b1.increment();
     
     let color = "";
     let number = "";
+
+    //Variación del color dependiendo de las centenas
 
     if(i<=100){color="#75125C";}
     else if(i<=200){color="#005B96";}
@@ -96,6 +102,8 @@ for(var i = 1; i <= 800; i++){
     else if(i<=600){color="#6C5834";}
     else if(i<=700){color="#75125C";}
     else if(i<=800){color="#005B96";}
+
+    //Relleno de la numeración
 
     if(i<10){
         number="00"+i+"";
@@ -107,6 +115,7 @@ for(var i = 1; i <= 800; i++){
         number = i+"";
     }
 
+    //Si el index es 1, creamos la tabla
     if(i==1){
         html+=`
         <table border="1">
@@ -127,6 +136,7 @@ for(var i = 1; i <= 800; i++){
             </td>
         `;
     }
+    //Si en la hoja ya hay 18 QR's, insertamos un salto de página y cerramos la tabla
     else if(i%18==0){
         html+=`
                 <td style=" background-color: ${color}; width:6.9cm; height:6.91cm;">
@@ -150,6 +160,7 @@ for(var i = 1; i <= 800; i++){
             <tr>
         `;
     }
+    //Si hay 6 QR's en la misma línea, saltamos a la siguiente 
     else if(i%6==0){
         html+=`
                 <td style=" background-color: ${color}; width:6.9cm; height:6.91cm;">
@@ -170,6 +181,7 @@ for(var i = 1; i <= 800; i++){
             <tr>
         `;
     }
+    //Si ya el for está a punto de terminar, cerramos el html
     else if(i==800){
         html+=`
                 <td style=" background-color: ${color}; width:6.9cm; height:6.91cm;">
@@ -204,6 +216,7 @@ for(var i = 1; i <= 800; i++){
 
         saving.start();
 
+        //Generamos el PDF
         pdf.create(html, options).toFile('./qrs.pdf', function(err, res) {
             if (err) return console.log(err);
             saving.stop();
@@ -211,6 +224,7 @@ for(var i = 1; i <= 800; i++){
         });
 
     }
+    //Insertamos normal el QR
     else{
         html+=`
         <td style=" background-color: ${color}; width:6.9cm; height:6.91cm;">

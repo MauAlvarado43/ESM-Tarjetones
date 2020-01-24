@@ -3,6 +3,7 @@ const router = express.Router();
 
 const database = require("../database");
 
+//Función para registrar solo un carro
 router.post("/addCar",(req,res)=>{
 
     if(req.session.level == "employee"){
@@ -25,6 +26,7 @@ router.post("/addCar",(req,res)=>{
             res.send({error:["Los parámetros no son correctos"],message:[]});
         }
         else{
+            //Manda a la base de datos la información del vehículo
             database.getCarsByNum(req.session.user).then((resolve2)=>{
                 if(resolve2.length==0){
                     database.addCar(req.session.user,brand,sbrand,color,plate).then((resolve)=>{
@@ -43,6 +45,7 @@ router.post("/addCar",(req,res)=>{
 
 });
 
+//Función para obtener el nombre del usuario que ingresó sesión
 router.post("/getName",(req,res)=>{
 
     if(req.session.level == "employee"){
@@ -68,6 +71,7 @@ router.post("/getName",(req,res)=>{
 
 });
 
+//Obtener todos los vehículos registrados por el empleado
 router.post("/getMyCars",(req,res)=>{
 
     if(req.session.level == "employee"){
@@ -127,6 +131,8 @@ router.post("/getMyCars",(req,res)=>{
 
 });
 
+//Sin usar
+/*
 router.post("/deleteMyCar",(req,res)=>{
 /*
     if(req.session.level == "employee"){
@@ -149,9 +155,10 @@ router.post("/deleteMyCar",(req,res)=>{
     else{*/
         res.send({error:[],message:[]});
     /*}
-*/
 });
+*/
 
+//Obtener el perfil del empleado
 router.post("/getProfile",(req,res)=>{
     if(req.session.user == null){
         res.send({error:[],message:[]});
@@ -255,6 +262,7 @@ router.post("/getProfile",(req,res)=>{
     }
 });
 
+//Actualizar el perfil del empleado
 router.post("/updateProfile",(req,res)=>{
 
     let dep   = req.body.dep;
@@ -289,6 +297,7 @@ router.post("/updateProfile",(req,res)=>{
 
 });
 
+//Otbener los carros que tenga el empleado
 router.post("/getRegistry",(req,res)=>{
     if(req.session.level == "employee"){
         database.getCarsByNum(req.session.user).then((resolve)=>{

@@ -1,5 +1,10 @@
 const mysql = require("mysql");
+/**********************************************************************************/
+//Esta IP es la que se modifica
 const ip = "http://192.168.100.48:3000";
+/**********************************************************************************/
+
+
 exports.ip = ip;
 
 
@@ -10,17 +15,21 @@ let connection = mysql.createConnection({
 	database : 'park'
 });
 
-/*connection.query(`LOAD DATA LOCAL INFILE 'D:/Bátiz/SERVICIO SOCIAL/Proyectos/ESM-tarjetones/tarjetones_new/db/baseEstacionamiento.csv' INTO TABLE empleado CHARACTER SET latin1 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES (apat_emp,
+//Si se borra la base de datos, cargamos el csv descomentando esta query y posteriormente se vuelve a comentar
+/*
+connection.query(`LOAD DATA LOCAL INFILE '${__dirname.replace(/\\/g,"/")}/db/baseEstacionamiento.csv' INTO TABLE empleado CHARACTER SET latin1 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 LINES (apat_emp,
     amat_emp,nom_emp,num_emp,tar_emp,rfc_emp,fun_emp,est_emp,turno,dep_emp,ext_emp,cel_emp,email);`,(err)=>{
     if(err){console.log(err);}
-});*/
+});
+*/
 
-
+//Obtener la fecha formateada
 function getActualDate(){
     let date = new Date();
     return (date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds());
 }
 
+//Función para logear al empleado
 exports.login = function(user,pass){
     try{
         return new Promise((resolve,reject)=>{
@@ -45,6 +54,7 @@ exports.login = function(user,pass){
     }catch(err){console.log(err);}
 };
 
+//Función para obtener al empleado por el número
 exports.getEmployeeByNumber = function(num_emp){
     try{
         return new Promise((resolve,reject)=>{
@@ -59,6 +69,7 @@ exports.getEmployeeByNumber = function(num_emp){
     }catch(err){console.log(err);}
 };
 
+//Función que agrega un empleado
 exports.addEmployee = function(data){
     try{
         return new Promise((resolve,reject)=>{
@@ -86,6 +97,7 @@ exports.addEmployee = function(data){
     }catch(err){console.log(err);}
 };
 
+//Función que obtiene todos los empleados
 exports.getEmployees = function(){
     try{
         return new Promise((resolve,reject)=>{
@@ -100,6 +112,7 @@ exports.getEmployees = function(){
     }catch(err){console.log(err);}
 };
 
+//Función que obtiene un empleado buscado
 exports.getEmployeesSearched = function(num_emp){
     try{
         return new Promise((resolve,reject)=>{
@@ -114,6 +127,7 @@ exports.getEmployeesSearched = function(num_emp){
     }catch(err){console.log(err);}
 };
 
+//Función para editar un empleado
 exports.editEmployee = function(num,data){
     try{
         return new Promise((resolve,reject)=>{
@@ -128,6 +142,7 @@ exports.editEmployee = function(num,data){
     }catch(err){console.log(err);}
 };
 
+//Función para editar el perfil de un empleado
 exports.editProfile = function(num,data){
     try{
         return new Promise((resolve,reject)=>{
@@ -140,8 +155,9 @@ exports.editProfile = function(num,data){
             });
         });
     }catch(err){console.log(err);}
-}
+};
 
+//Función para eliminar un empleado
 exports.deleteEmployee = function(num){
     try{
         return new Promise((resolve,reject)=>{
@@ -161,6 +177,7 @@ exports.deleteEmployee = function(num){
     }catch(err){console.log(err);}
 };
 
+//Función para obtener todos los carros
 exports.getCars = function(){
     try{
         return new Promise((resolve,reject)=>{
@@ -175,6 +192,7 @@ exports.getCars = function(){
     }catch(err){console.log(err);}
 };
 
+//Función para obtenerun carro buscado
 exports.getCarsSearched = function(num_emp){
     try{
         return new Promise((resolve,reject)=>{
@@ -189,6 +207,7 @@ exports.getCarsSearched = function(num_emp){
     }catch(err){console.log(err);}
 };
 
+//Función para agregar un carro
 exports.addCar = function(num_emp,brand,sbrand,color,plate){
     try{
         return new Promise((resolve,reject)=>{
@@ -237,6 +256,7 @@ exports.addCar = function(num_emp,brand,sbrand,color,plate){
     }catch(err){console.log(err);}
 };
 
+//Función para eliminar un carro
 exports.deleteCar = function(id_car,id_reg){
     try{
         return new Promise((resolve,reject)=>{
@@ -274,6 +294,7 @@ exports.deleteCar = function(id_car,id_reg){
     }
 };
 
+//Función para obtener los carros por el número de empleado
 exports.getCarsByNum = function(num_emp){
     try{
         return new Promise((resolve,reject)=>{
@@ -288,6 +309,8 @@ exports.getCarsByNum = function(num_emp){
     }catch(err){console.log(err);}
 };
 
+//Funciones inutilizada
+/*
 exports.deleteMyCar = function(id_reg,id_car){
     try{
         return new Promise((resolve,reject)=>{
@@ -325,6 +348,7 @@ exports.deleteMyCar = function(id_reg,id_car){
     }catch(err){console.log(err);}
 };
 
+
 exports.updateQR = function(id_reg){
     try{
         return new Promise((resolve,reject)=>{
@@ -351,7 +375,9 @@ exports.updateQR = function(id_reg){
         });
     }catch(err){console.log(err);}
 };
+*/
 
+//Función que busca el registro del vehículo
 exports.readQR = function(id_reg){
     try{
         return new Promise((resolve,reject)=>{
@@ -365,6 +391,7 @@ exports.readQR = function(id_reg){
     }catch(err){console.log(err);}
 };
 
+//Función que obtiene la cantidad de los QR's
 exports.getAmountQR = function(){
     try{
         return new Promise((resolve,reject)=>{
@@ -378,6 +405,7 @@ exports.getAmountQR = function(){
     }catch(err){console.log(err);}
 };
 
+//Función que aumenta en 30 los QR's, los registra a la base de datos y los guarda en png
 exports.increaseAmountQR = function(){
     try{
         return new Promise((resolve,reject)=>{
@@ -386,6 +414,7 @@ exports.increaseAmountQR = function(){
                     console.log(err);
                     resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                 }
+                //Empezamos el ciclo
                 for(var i = res[0].maximus+1; i <= (res[0].maximus+30); i++){
                     connection.query("INSERT INTO disponibles (id_dis,used) VALUES ("+i+",0)",(err2,res2,fields2)=>{
                         if(err2){
@@ -393,6 +422,7 @@ exports.increaseAmountQR = function(){
                             resolve({error:["Ha ocurrido un error, inténtelo más tarde"],message:[]});
                         }
                     });
+                    //Cremos el stream para guardar los png
                     var qr = require('qr-image-color');
                     var png_string = qr.image(`${require('./database').ip}/readQR?abc=${i}`, { type: 'png', color: "white",size:7, transparent: true });
                     png_string.pipe(require('fs').createWriteStream(`./qrCodes/${i}.png`));
@@ -547,6 +577,8 @@ exports.increaseAmountQR = function(){
                                                 </body>
                                                 </html>
                                                 `;
+
+                                                //Generamos el pdf
 
                                                 pdf.create(html, options).toFile('./qrs_2.pdf', function(err, reso) {
                                                     if (err) {console.log(err);}

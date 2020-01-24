@@ -3,6 +3,8 @@ const router = express.Router();
 
 const database = require("../database");
 
+//Función para agregar un empleado
+
 router.post("/addEmployee",(req,res)=>{
 
     if(req.session.level=="admin"){
@@ -21,6 +23,8 @@ router.post("/addEmployee",(req,res)=>{
     let ext   = req.body.ext;
     let est   = req.body.est;
 
+    //Recabamos todos los datos y los validamos
+
     let array = [num,name,appat,apmat,rfc,tar,nom,turn,ads,email,phone,ext,est];
     let bool = true;
 
@@ -31,6 +35,7 @@ router.post("/addEmployee",(req,res)=>{
     });
 
     if(bool){
+        //Si los datos son correctos, entonces lo guardamos en la base de datos
         database.addEmployee([num,name,appat,apmat,rfc,tar,nom,turn,ads,email,phone,ext,est]).then((resolve)=>{
             res.send(resolve);
         });
@@ -45,6 +50,7 @@ router.post("/addEmployee",(req,res)=>{
     
 });
 
+//Función para editar un empleado
 router.post("/editEmployees",(req,res)=>{
     if(req.session.level=="admin"){
 
@@ -61,6 +67,8 @@ router.post("/editEmployees",(req,res)=>{
         let phone = req.body.phone;
         let ext   = req.body.ext;
         let est   = req.body.est;
+
+        //Recabamos todos los datos y los validamos
     
         let array = [num,name,appat,apmat,rfc,tar,nom,turn,ads,email,phone,ext,est];
         let bool = true;
@@ -88,6 +96,8 @@ router.post("/editEmployees",(req,res)=>{
                 est_emp: est
             };
 
+            //Le pasamos a la base de datos la información en un JSON para indicar los campos modificados
+
             database.editEmployee(num,data).then((resolve)=>{
                 res.send(resolve);
             });
@@ -102,6 +112,7 @@ router.post("/editEmployees",(req,res)=>{
         }
 });
 
+//Función para eliminar un empleado
 router.post("/deleteEmployees",(req,res)=>{
     if(req.session.level=="admin"){
         let num = req.body.num;
@@ -109,6 +120,7 @@ router.post("/deleteEmployees",(req,res)=>{
             res.send({error:["Los parámetros no son correctos"],message:[]});
         }
         else{
+            //Mandamos el número de empleado para borrarlo
             database.deleteEmployee(num).then((resolve)=>{
                 res.send(resolve);
             });
@@ -119,9 +131,12 @@ router.post("/deleteEmployees",(req,res)=>{
     }
 });
 
+//Función para obtener a todos los empleados
 router.post("/getEmployees",(req,res)=>{
     if(req.session.level=="admin"){
         database.getEmployees().then((resolve)=>{
+
+            //Obtenemos los registros y a su vez le damos css
 
             let html = `<table class="table table-sm table-hover table-bordered" style="background-color: white;">
                             <tr>
@@ -181,9 +196,12 @@ router.post("/getEmployees",(req,res)=>{
     }
 });
 
+//Funcion para buscar alos empleados
 router.post("/getEmployeesSearched",(req,res)=>{
     if(req.session.level=="admin"){
         database.getEmployeesSearched(req.body.n).then((resolve)=>{
+
+            //Obtenemos los registros y a su vez le damos css
 
             let html = `<table class="table table-sm table-hover table-bordered" style="background-color: white;">
                             <tr>
@@ -242,12 +260,16 @@ router.post("/getEmployeesSearched",(req,res)=>{
     }
 });
 
+//Función para obtener un vehículo buscado
 router.post("/getCarsSearched",(req,res)=>{
 
     let num_emp = req.body.n;
 
     if(req.session.level=="admin"){
         database.getCarsSearched(num_emp).then((resolve)=>{
+
+            //Obtenemos los registros y a su vez le damos css
+
             let html = `<table class="table table-sm table-hover table-bordered" style="background-color: white;">
                             <tr>
                                 <th style="text-align: center; vertical-align: middle;">Nombre</th>
@@ -303,9 +325,13 @@ router.post("/getCarsSearched",(req,res)=>{
     }
 });
 
+//Función para obtener todos los vehículos
 router.post("/getCars",(req,res)=>{
     if(req.session.level=="admin"){
         database.getCars().then((resolve)=>{
+
+            //Obtenemos los registros y a su vez le damos css
+
             let html = `<table class="table table-sm table-hover table-bordered" style="background-color: white;">
                             <tr>
                                 <th style="text-align: center; vertical-align: middle;">Nombre</th>
@@ -361,6 +387,7 @@ router.post("/getCars",(req,res)=>{
     }
 });
 
+//Función para eliminar un vehículo a través del registro
 router.post("/deleteCar",(req,res)=>{
 
     if(req.session.level=="admin"){
@@ -387,6 +414,8 @@ router.post("/deleteCar",(req,res)=>{
 
 });
 
+//SIN USAR
+/*
 router.post("/updateQR",(req,res)=>{
     if(req.session.level=="admin"){
         
@@ -422,7 +451,9 @@ router.post("/generateQR",(req,res)=>{
     });
 
 });
+*/
 
+//Función para obtener la cantidad de QR's disponibles
 router.post("/getAmounQR",(req,res)=>{
     if(req.session.level=="admin"){
         
@@ -436,6 +467,7 @@ router.post("/getAmounQR",(req,res)=>{
     }
 });
 
+//Generar otros 30 códigos QR
 router.post("/increaseAmounQR",(req,res)=>{
     if(req.session.level=="admin"){    
         database.increaseAmountQR().then((resolve)=>{
@@ -447,6 +479,7 @@ router.post("/increaseAmounQR",(req,res)=>{
     }
 });
 
+//Descargar el pdf con los 800 QR's
 router.get("/downloadPDF1",(req,res)=>{
     if(req.session.level=="admin"){    
         res.download("qrs.pdf");
@@ -455,6 +488,8 @@ router.get("/downloadPDF1",(req,res)=>{
         res.send({error:[],message:[]});
     }   
 });
+
+//Descargar el pdf con los 30 QR's generados
 router.get("/downloadPDF2",(req,res)=>{
     if(req.session.level=="admin"){    
         res.download("qrs_2.pdf");
@@ -464,6 +499,7 @@ router.get("/downloadPDF2",(req,res)=>{
     }   
 });
 
+//Obtener el nombre del empleado en el registro de vehículos para confirmar su identidad
 router.post("/checkEmployee",(req,res)=>{
 
     let num_emp = req.body.emp;

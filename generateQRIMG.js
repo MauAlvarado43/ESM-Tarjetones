@@ -2,6 +2,7 @@ const _colors = require("chalk");
 const cliProgress = require('cli-progress');
 const ora = require('ora');
 
+//Barra de progreso de la generación de las imágenes
 var b1 = new cliProgress.SingleBar({
     format: _colors.red("Generando QR's |") + _colors.blue('{bar}') + "| {percentage}% | {value}/{total} | Faltan aproximadamente {eta} s",
     barCompleteChar: '\u2588',
@@ -16,6 +17,7 @@ b1.start(1600, 0,{
 
 let json = [];
 
+//Generar los 800 QR's en png
 for(var i = 1; i <= 800; i++){
 
     let sign = require("./cipher").sign(i+"");
@@ -30,6 +32,7 @@ for(var i = 1; i <= 800; i++){
     var qr = require('qr-image-color');
     var png_string = qr.image(`${require('./database').ip}/readQR?abc=${i}&sign=${sign}`, { type: 'png', color: "white",size:7, transparent: true });
     
+    //Stream para guardar las imágenes
     png_string.pipe(require('fs').createWriteStream(`./qrCodes/${i}.png`)).on("finish",()=>{
         b1.increment();
         if(b1.value==1600){

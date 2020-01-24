@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const password = "{qp}gEtS$C2b!=3T";
 
+//Generar un par de llaves RSA, la privada con un AES de 256
 exports.createKeys = function(){
     const { generateKeyPair } = require('crypto');
     generateKeyPair('rsa', {
@@ -28,6 +29,7 @@ exports.createKeys = function(){
     });
 };
 
+//Generar la firma digital y rellenarla con SHA256
 exports.sign = function(data){
         let private_key = fs.readFileSync('./keys/privateKey.pem', 'utf-8');
         let message = data;

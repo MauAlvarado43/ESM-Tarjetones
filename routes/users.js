@@ -3,11 +3,13 @@ const router = express.Router();
 
 const database = require("../database");
 
+//Función para iniciar sesión
 router.post("/login",(req,res)=>{
 
     let user = req.body.user;
     let password = req.body.pass;
 
+    //Iniciar como administrador
     if(user=="root" && password=="n0m3l0"){
 
       req.session.level = "admin";
@@ -16,6 +18,7 @@ router.post("/login",(req,res)=>{
       res.send({error:[],message:["Iniciando sesión"],level:0});
 
     }
+    //Iniciar como empleado
     else if(/[0-9]/.test(user)){
 
       database.login(user,password).then((resolve)=>{
@@ -35,27 +38,32 @@ router.post("/login",(req,res)=>{
 
 });
 
+//Cerrar sesión
 router.get("/logout",(req,res)=>{
   req.session.level = null;
   req.session.user = null;
   res.redirect("index.html");
 });
 
+//Obtener el número de empleado logeado
 router.post("/getUser",(req,res)=>{
   res.send(req.session.user);
 });
 
+//Redireccionar al index
 router.post("/",(req,res)=>{
   res.send("index.html");
 });
 
+//Función para leer el código qr
 router.get("/readQR",(req,res)=>{
 
   let id_reg = req.query.abc;
   let sign = req.query.sign;
   let json = JSON.parse(require("fs").readFileSync("./keys/signs.json"));
 
-  if(id_reg == null){
+  //Si el qr no tiene los datos necesarios
+  if(id_reg == null || sign == null){
     res.send(`<!DOCTYPE html>
 
       <html lang="es">
@@ -97,8 +105,8 @@ router.get("/readQR",(req,res)=>{
           </body>
           </html>`);
   }
-
-  else if(id_reg == undefined){
+//Si el qr no tiene los datos necesarios
+  else if(id_reg == undefined || sign == undefined){
     res.send(`<!DOCTYPE html>
 
     <html lang="es">
@@ -143,6 +151,7 @@ router.get("/readQR",(req,res)=>{
 
   else{
     database.readQR(id_reg).then((resolve)=>{
+      //Si el qr no está registrado
       if(resolve.length==0){
         res.send(`<!DOCTYPE html>
 
@@ -185,6 +194,8 @@ router.get("/readQR",(req,res)=>{
             </body>
             </html>`);
       }
+
+      //Si la firma digital corresponde y además está registrado el QR
       else if(sign.trim()==json[id_reg-1].trim()){
         res.send(`<!DOCTYPE html>
 
@@ -228,6 +239,7 @@ router.get("/readQR",(req,res)=>{
             </body>
             </html>`);
       }
+      //Si la firma digital no corresponde
       else{
         res.send(`<!DOCTYPE html>
 

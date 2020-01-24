@@ -17,12 +17,14 @@ app.use(session({
 	saveUninitialized: true
 }));
 
+//Obtener cada módulos para redireccionar las peticiones
 app.use(require('./routes/users'));
 app.use(require('./routes/admin'));
 app.use(require('./routes/employee'));
 
 app.use(express.static('public'));
 
+//Función para descargar un zip de la carpeta de qrCodes
 app.get("/downloadZIP",(req,res)=>{
 	if(req.session.level=="admin"){
 		zipFolder.zipFolder(__dirname.replace(/\\/g,"/")+'/qrCodes', __dirname.replace(/\\/g,"/")+'/db/qrGuardados.zip', function(err) {
