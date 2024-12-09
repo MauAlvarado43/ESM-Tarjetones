@@ -1,0 +1,7 @@
+*.csv
+*.xml
+*.xlsx
+*.sql
+*.pem
+
+/node_modules
